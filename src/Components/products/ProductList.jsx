@@ -1,0 +1,365 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+
+const ProductEditModal = ({ isOpen, onClose, product, onSave }) => {
+    const [formData, setFormData] = useState({
+        name: '',
+        description: '',
+        category: '',
+        subcategory: '', // Store subcategory name instead of ID
+        size: '',
+        stock: '',
+        price: '',
+        sale: '',
+    });
+    const [mainImage, setMainImage] = useState(null);
+    const [images, setImages] = useState({
+        image1: null,
+        image2: null,
+        image3: null,
+        image4: null,
+        image5: null,
+    });
+    
+    const [subcategories, setSubcategories] = useState([]);
+    const [existingImages, setExistingImages] = useState({
+        mainImage: '',
+        image1: '',
+        image2: '',
+        image3: '',
+        image4: '',
+        image5: '',
+    });
+
+    useEffect(() => {
+        if (isOpen) {
+            // Fetch available subcategories
+            const fetchSubcategories = async () => {
+                try {
+                    const res = await axios.get('http://localhost:3001/api/subcategories'); // Update URL to your API endpoint for subcategories
+                    setSubcategories(res.data);
+
+                    if (product) {
+                        // Set form data with existing product details
+                        setFormData({
+                            name: product.name,
+                            description: product.description,
+                            category: product.category,
+                            subcategory: product.subcategory, // Set subcategory name
+                            size: product.size.join(', '), // Convert array to comma separated string
+                            stock: product.stock,
+                            price: product.price,
+                            sale: product.sale,
+                        });
+
+                        // Fetch image names and set existing images
+                        setExistingImages({
+                            mainImage: product.mainImageName || '', // Assuming you have image names in the product object
+                            image1: product.image1Name || '',
+                            image2: product.image2Name || '',
+                            image3: product.image3Name || '',
+                            image4: product.image4Name || '',
+                            image5: product.image5Name || '',
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error fetching subcategories:', error);
+                }
+            };
+
+            fetchSubcategories();
+        }
+    }, [isOpen, product]);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleImageChange = (e) => {
+        const { name, files } = e.target;
+        if (name === 'mainImage') {
+            setMainImage(files[0]);
+        } else {
+            setImages(prevImages => ({
+                ...prevImages,
+                [name]: files[0]
+            }));
+        }
+    };
+
+    const handleSubcategoryChange = (e) => {
+        const selectedSubcategoryId = e.target.value;
+        const selectedSubcategory = subcategories.find(sub => sub._id === selectedSubcategoryId);
+
+        setFormData({
+            ...formData,
+            subcategory: selectedSubcategory ? selectedSubcategory.name : '', // Set subcategory name
+            category: selectedSubcategory ? selectedSubcategory.category : '' // Set category based on selected subcategory
+        });
+    };
+
+    const handleSave = async () => {
+        const formDataToSend = new FormData();
+
+        formDataToSend.append('name', formData.name);
+        formDataToSend.append('description', formData.description);
+        formDataToSend.append('category', formData.category);
+        formDataToSend.append('subcategory', formData.subcategory); // Send subcategory name
+        formDataToSend.append('size', formData.size);
+        formDataToSend.append('stock', formData.stock);
+        formDataToSend.append('price', formData.price);
+        formDataToSend.append('sale', formData.sale);
+        if (mainImage) formDataToSend.append('mainImage', mainImage);
+        Object.keys(images).forEach((key) => {
+            if (images[key]) formDataToSend.append(key, images[key]);
+        });
+
+        try {
+            await axios.put(`http://localhost:3001/api/products/${product._id}`, formDataToSend, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            onSave(); // Callback to refresh or update the product list
+            onClose(); // Close the modal after saving
+        } catch (error) {
+            alert('Error updating product');
+            console.error(error);
+        }
+    };
+
+    if (!isOpen) return null;
+
+    return (
+        <div className='fixed inset-0 overflow-y-auto bg-gray-500 bg-opacity-75 flex justify-center items-center'>
+            <div className='bg-white p-4 rounded-lg mt-[650px] shadow-md max-w-lg w-full'>
+                <h2 className='text-xl font-semibold mb-4'>Edit Product</h2>
+                <form className='space-y-4'>
+                    <div className='flex flex-col'>
+                        <label className='font-medium'>Name:</label>
+                        <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            className='border border-gray-300 p-2 rounded'
+                            required
+                        />
+                    </div>
+                    <div className='flex flex-col'>
+                        <label className='font-medium'>Description:</label>
+                        <textarea
+                            name="description"
+                            value={formData.description}
+                            onChange={handleChange}
+                            className='border border-gray-300 p-2 rounded'
+                            required
+                        />
+                    </div>
+                    <div className='flex flex-col'>
+                        <label className='font-medium'>Category:</label>
+                        <div className='p-2 border border-gray-300 rounded'>{formData.category || 'Select a subcategory to set category'}</div>
+                    </div>
+
+                    <div className='flex flex-col'>
+                        <label className='font-medium'>Subcategory:</label>
+                        <select
+                            name="subcategory"
+                            value={subcategories.find(sub => sub.name === formData.subcategory)?._id || ""}
+                            onChange={handleSubcategoryChange}
+                            className='border border-gray-300 p-2 rounded'
+                            required
+                        >
+                            <option value="">Select a subcategory</option>
+                            {subcategories.map(subcat => (
+                                <option key={subcat._id} value={subcat._id}>{subcat.name}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className='flex flex-col'>
+                        <label className='font-medium'>Size (comma separated):</label>
+                        <input
+                            type="text"
+                            name="size"
+                            value={formData.size}
+                            onChange={handleChange}
+                            className='border border-gray-300 p-2 rounded'
+                            required
+                        />
+                    </div>
+                    <div className='flex flex-col'>
+                        <label className='font-medium'>Stock:</label>
+                        <input
+                            type="number"
+                            name="stock"
+                            value={formData.stock}
+                            onChange={handleChange}
+                            className='border border-gray-300 p-2 rounded'
+                            required
+                        />
+                    </div>
+                    <div className='flex flex-col'>
+                        <label className='font-medium'>Price:</label>
+                        <input
+                            type="number"
+                            name="price"
+                            value={formData.price}
+                            onChange={handleChange}
+                            className='border border-gray-300 p-2 rounded'
+                            required
+                        />
+                    </div>
+                    <div className='flex flex-col'>
+                        <label className='font-medium'>Sale (% off):</label>
+                        <input
+                            type="number"
+                            name="sale"
+                            value={formData.sale}
+                            onChange={handleChange}
+                            className='border border-gray-300 p-2 rounded'
+                        />
+                    </div>
+
+                    <div className='flex flex-col'>
+                        <label className='font-medium'>Main Image:</label>
+                        <input
+                            type="file"
+                            name="mainImage"
+                            onChange={handleImageChange}
+                            className='border border-gray-300 p-2 rounded'
+                        />
+                        {existingImages.mainImage && (
+                            <div className='mt-2'>
+                                <span className='font-medium'>Current Main Image:</span>
+                                <p>{existingImages.mainImage}</p>
+                            </div>
+                        )}
+                    </div>
+
+                    {[...Array(5)].map((_, index) => (
+                        <div key={index} className='flex flex-col'>
+                            <label className='font-medium'>Image {index + 1}:</label>
+                            <input
+                                type="file"
+                                name={`image${index + 1}`}
+                                onChange={handleImageChange}
+                                className='border border-gray-300 p-2 rounded'
+                            />
+                            {existingImages[`image${index + 1}`] && (
+                                <div className='mt-2'>
+                                    <span className='font-medium'>Current Image {index + 1}:</span>
+                                    <p>{existingImages[`image${index + 1}`]}</p>
+                                </div>
+                            )}
+                        </div>
+                    ))}
+
+                    <div className='flex justify-end space-x-4 mt-4'>
+                        <button type="button" onClick={handleSave} className='bg-blue-500 text-white py-2 px-4 rounded'>Save</button>
+                        <button type="button" onClick={onClose} className='bg-gray-500 text-white py-2 px-4 rounded'>Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+};
+
+
+
+const ProductList = () => {
+    const [products, setProducts] = useState([]);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+
+    useEffect(() => {
+        // Fetch products from the server
+        const fetchProducts = async () => {
+            try {
+                const res = await axios.get('http://localhost:3001/api/products'); // Update with your endpoint
+                setProducts(res.data);
+            } catch (error) {
+                console.error('Error fetching products:', error);
+            }
+        };
+
+        fetchProducts();
+    }, []);
+
+    const handleEdit = (product) => {
+        setSelectedProduct(product);
+        setShowModal(true);
+    };
+
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`http://localhost:3001/api/products/${id}`); // Update with your endpoint
+            setProducts(products.filter(product => product._id !== id));
+        } catch (error) {
+            console.error('Error deleting product:', error);
+        }
+    };
+
+    return (
+
+        <div className='ml-[10px] xsx:ml-[285px] mr-[12px] flex flex-col'>
+            <table className="min-w-full bg-white border border-gray-300 mt-4">
+                <thead>
+                    <tr>
+                        <th className="border px-4 py-2">Name</th>
+                        <th className="border px-4 py-2">Subcategory</th>
+                        <th className="border px-4 py-2">Stock</th>
+                        <th className="border px-4 py-2">Price</th>
+                        <th className="border px-4 py-2">Actions</th>
+                    </tr>
+                </thead>
+                <tbody className='bg-white divide-y divide-gray-200'>
+                    {products.map(product => (
+                        <tr key={product._id}>
+                            <td className="border px-4 py-2">{product.name}</td>
+                            <td className="border px-4 py-2">{product.subcategory}</td>
+                            <td className="border px-4 py-2">{product.stock}</td>
+                            <td className="border px-4 py-2">${product.price}</td>
+                            <td className="border px-4 py-2">
+                                <button
+                                    onClick={() => handleEdit(product)}
+                                    className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(product._id)}
+                                    className="bg-red-500 text-white px-4 py-2 rounded"
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            {showModal && (
+                <ProductEditModal
+                    isOpen={showModal} // Pass the modal open state
+                    onClose={() => setShowModal(false)} // Pass the function to close the modal
+                    product={selectedProduct} // Pass the currently selected product
+                    onSave={async () => {
+                        // Fetch updated product list after saving
+                        try {
+                            const res = await axios.get('http://localhost:3001/api/products');
+                            setProducts(res.data);
+                        } catch (error) {
+                            console.error('Error fetching updated products:', error);
+                        }
+                        setShowModal(false); // Close the modal after saving
+                    }}
+                />
+            )}
+
+        </div>
+    );
+};
+
+export default ProductList;

@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, } from "react-router-dom";
 
-function App() {
+import Navbar from "./Components/Navbar";
+import Dashboard from "./Components/Dashboard";
+import CategoryForm from "./Components/categories/Addcategories";
+import CategoriesList from "./Components/categories/CategoryList";
+import SubcategoryCreationForm from "./Components/subcategories/AddsubCategories";
+import SubcategoryList from "./Components/subcategories/SubcategoryList";
+import AddProductForm from "./Components/products/Addproduct";
+import ProductList from "./Components/products/ProductList";
+import UsersOrders from "./Components/orders/UserOrders";
+import ShowOrders from "./Components/orders/ShowOrders";
+import OrderDetails from "./Components/orders/OrderDetails";
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Navbar />
+      <Routes>
+
+        <Route exact path="/" element={<Dashboard />} />
+        <Route exact path="/Categoryform" element={<CategoryForm />} />
+        <Route exact path="/categoryList" element={<CategoriesList />} />
+        <Route exact path="/subCategoryform" element={<SubcategoryCreationForm />} />
+        <Route exact path="/subCategoryList" element={<SubcategoryList />} />
+        <Route exact path="/addProduct" element={<AddProductForm />} />
+        <Route exact path="/productList" element={<ProductList />} />
+        <Route exact path="/admin-orders-list" element={<UsersOrders />} />
+        <Route exact path="/admin-orders-list/orders/:documentId" element={<ShowOrders />} />
+        <Route exact path="/order-details" element={<OrderDetails />} />
+
+
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;

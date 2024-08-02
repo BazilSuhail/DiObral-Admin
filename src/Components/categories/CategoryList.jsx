@@ -1,9 +1,12 @@
-// frontend/src/components/CategoriesList.js
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const CategoryForm = ({ category, onClose, onUpdate }) => {
+import { MdDeleteOutline } from "react-icons/md";
+import { FiEdit } from "react-icons/fi";
+import { IoMdAddCircleOutline } from "react-icons/io";
+
+
+const CategoryForm = ({ category, onClose, onUpdate, onCreate }) => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -15,6 +18,8 @@ const CategoryForm = ({ category, onClose, onUpdate }) => {
         name: category.name,
         description: category.description,
       });
+    } else {
+      setFormData({ name: '', description: '' });
     }
   }, [category]);
 
@@ -23,18 +28,30 @@ const CategoryForm = ({ category, onClose, onUpdate }) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleUpdate = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.put(`http://localhost:3001/api/category/${category._id}`, formData);
-      onUpdate(response.data.category);
-    } catch (error) {
-      console.error('Error updating category:', error);
+    if (category) {
+      // Update existing category
+      try {
+        const response = await axios.put(`http://localhost:3001/api/category/${category._id}`, formData);
+        onUpdate(response.data.category);
+      } catch (error) {
+        console.error('Error updating category:', error);
+      }
+    } else {
+      // Create new category
+      try {
+        const response = await axios.post('http://localhost:3001/api/category/add-category', formData);
+        onCreate(response.data.category);
+      } catch (error) {
+        console.error('Error creating category:', error);
+      }
     }
+    onClose();
   };
 
   const handleDelete = async () => {
-    if (window.confirm('Are you sure you want to delete this category?')) {
+    if (category && window.confirm('Are you sure you want to delete this category?')) {
       try {
         await axios.delete(`http://localhost:3001/api/category/${category._id}`);
         onClose();
@@ -47,9 +64,10 @@ const CategoryForm = ({ category, onClose, onUpdate }) => {
   return (
     <div className="fixed inset-0 bg-red-50 shadow-custom-dark bg-opacity-75 flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-
-        <h2 className='text-2xl underline text-red-800 font-bold text-center mb-4'>Edit Category Details</h2>
-        <form onSubmit={handleUpdate} className="space-y-4">
+        <h2 className='text-2xl underline text-red-800 font-bold text-center mb-4'>
+          {category ? 'Edit Category Details' : 'Add New Category'}
+        </h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="name" className="block font-medium text-red-700">Category Name:</label>
             <input
@@ -74,26 +92,30 @@ const CategoryForm = ({ category, onClose, onUpdate }) => {
               required
             ></textarea>
           </div>
-          <button
-            type="submit"
-            className="bg-blue-500 text-white rounded px-4 py-2"
-          >
-            Update Category
-          </button>
-          <button
-            type="button"
-            onClick={handleDelete}
-            className="bg-red-500 text-white rounded px-4 py-2 ml-2"
-          >
-            Delete
-          </button>
-          <button
-            type="button"
-            onClick={onClose}
-            className="bg-gray-500 text-white rounded px-4 py-2 ml-2"
-          >
-            Cancel
-          </button>
+          <div className="flex space-x-2">
+            <button
+              type="submit"
+              className="bg-blue-500 text-white rounded px-4 py-2"
+            >
+              {category ? 'Update Category' : 'Add Category'}
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="bg-gray-500 text-white rounded px-4 py-2"
+            >
+              Cancel
+            </button>
+            {category && (
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="bg-red-500 text-white rounded px-4 py-2"
+              >
+                Delete
+              </button>
+            )}
+          </div>
         </form>
       </div>
     </div>
@@ -101,9 +123,11 @@ const CategoryForm = ({ category, onClose, onUpdate }) => {
 };
 
 
+
 const CategoriesList = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [showCreateForm, setShowCreateForm] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -127,6 +151,18 @@ const CategoriesList = () => {
     }
   };
 
+  const handleCreate = (newCategory) => {
+    setCategories([...categories, newCategory]);
+    setShowCreateForm(false);
+  };
+
+  const handleUpdate = (updatedCategory) => {
+    setCategories(categories.map(category =>
+      category._id === updatedCategory._id ? updatedCategory : category
+    ));
+    setSelectedCategory(null);
+  };
+
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this category?')) {
       try {
@@ -140,9 +176,19 @@ const CategoriesList = () => {
 
   return (
     <div className='ml-[10px] xsx:ml-[285px] mr-[12px] flex flex-col'>
-      <div className='my-[8px] flex flex-col w-[100%] py-[35px] px-[15px] justify-center border border-red-200 bg-red-50 rounded-xl overflow-x-auto'>
+
+      <h2 className='text-[32px] mt-[25px] underline underline-offset-2 mb-[5px] text-red-900 font-bold '>CATEGORY DETAILS</h2>
+
+
+      <div className='my-[8px] flex flex-col w-[100%] pb-[35px] px-[15px] justify-center border border-red-200 bg-red-50 rounded-xl overflow-x-auto'>
+        <button onClick={() => setShowCreateForm(true)} className="ml-auto mt-[15px] bg-red-900 hover:text-red-900 hover:bg-red-100 text-red-100 mb-[8px] flex items-center rounded-[25px] px-[15px] py-[8px]">
+          <IoMdAddCircleOutline className='text-[30px]' />
+          <div className='ml-[5px] mb-[2px] font-medium text-[20px]'>Add Category</div>
+        </button>
+
+
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <h2 className='text-3xl underline mb-[17px] text-red-900 font-bold '>Categories</h2>
+
           <table className="w-full text-lg text-left text-gray-500 dark:text-gray-400">
             <thead className="text-sm text-red-900 uppercase bg-gray-50 dark:bg-red-900  dark:text-red-200">
               <tr>
@@ -153,41 +199,39 @@ const CategoriesList = () => {
             </thead>
             <tbody>
               {categories.map(category => (
-                <tr key={category._id}  className='text-center odd:bg-white even:bg-red-100 text-custom-blue  border-b'>
-                  <th th scope="row" class="px-6 py-4 font-bold whitespace-nowrap">{category.name}</th>
+                <tr key={category._id} className='text-center odd:bg-white even:bg-red-50 text-custom-blue border-b'>
+                  <th scope="row" className="px-6 py-4 font-bold whitespace-nowrap">{category.name}</th>
                   <td className="whitespace-nowrap text-center px-6 py-4">{category.description}</td>
-                  <td className="whitespace-nowrap text-center px-6 py-4">
+                  <td className="whitespace-nowrap text-center px-6 py-4 flex justify-center space-x-4">
                     <button
                       onClick={() => handleEdit(category._id)}
-                      className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                      className="text-blue-100 bg-blue-500 rounded-full p-2 hover:bg-blue-600 transition-colors"
                     >
-                      Edit
+                      <FiEdit size={24} />
                     </button>
                     <button
                       onClick={() => handleDelete(category._id)}
-                      className="bg-red-500 text-white px-4 py-2 rounded"
+                      className="text-red-600 bg-red-300 rounded-full p-2 hover:bg-red-200 transition-colors"
                     >
-                      Delete
+                      <MdDeleteOutline size={24} />
                     </button>
                   </td>
                 </tr>
               ))}
             </tbody>
+
           </table>
-
         </div>
-
       </div>
-      {selectedCategory && (
+      {(showCreateForm || selectedCategory) && (
         <CategoryForm
           category={selectedCategory}
-          onClose={() => setSelectedCategory(null)}
-          onUpdate={(updatedCategory) => {
-            setCategories(categories.map(category =>
-              category._id === updatedCategory._id ? updatedCategory : category
-            ));
+          onClose={() => {
             setSelectedCategory(null);
+            setShowCreateForm(false);
           }}
+          onCreate={handleCreate}
+          onUpdate={handleUpdate}
         />
       )}
     </div>

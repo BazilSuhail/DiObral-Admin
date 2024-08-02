@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import { MdDeleteOutline } from "react-icons/md";
+import { FiEdit } from "react-icons/fi";
 
 const ProductEditModal = ({ isOpen, onClose, product, onSave }) => {
     const [formData, setFormData] = useState({
@@ -309,8 +311,9 @@ const ProductList = () => {
 
         <div className='ml-[10px] xsx:ml-[285px] mr-[12px] flex flex-col'>
             <div className='my-[8px] flex flex-col w-[100%] py-[35px] px-[15px] justify-center bg-red-50 rounded-xl overflow-x-auto'>
+
+                <h2 className='text-2xl text-red-900 mb-[8px] font-bold '>Products Added</h2>
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <h2 className='text-2xl text-red-900 mb-[8px] font-bold '>Products Added</h2>
                     <table className="w-full text-lg text-left text-gray-500 dark:text-gray-400">
                         <thead className="text-xs text-red-900 uppercase bg-gray-50 dark:bg-red-900  dark:text-red-200">
 
@@ -327,20 +330,22 @@ const ProductList = () => {
                                 <tr key={product._id} className='text-center odd:bg-white even:bg-red-100 text-custom-blue  border-b'>
                                     <th th scope="row" class="px-6 py-4 font-bold whitespace-nowrap">{product.name}</th>
                                     <td className="whitespace-nowrap text-center font-semibold text-red-700 px-6 py-4">{product.stock}</td>
-                                    <td className="whitespace-nowrap text-center px-6 py-4"><span className='bg-red-800 text-white py-[4px] font-medium px-[10px] rounded-lg'>{product.subcategory}</span></td>
-                                    <td className="whitespace-nowrap text-center px-6 py-4">${product.price}</td>
                                     <td className="whitespace-nowrap text-center px-6 py-4">
+                                        <div className=' text-white bg-red-700 py-[5px] font-medium rounded-lg'>{product.subcategory}</div>
+                                    </td>
+                                    <td className="whitespace-nowrap text-center px-6 py-4">${product.price}</td>
+                                    <td className="whitespace-nowrap text-center px-6 py-4 flex justify-center space-x-4">
                                         <button
                                             onClick={() => handleEdit(product)}
-                                            className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                                            className="text-blue-100 bg-blue-500 rounded-full p-2 hover:bg-blue-600 transition-colors"
                                         >
-                                            Edit
+                                            <FiEdit size={24} />
                                         </button>
                                         <button
                                             onClick={() => handleDelete(product._id)}
-                                            className="bg-red-500 text-white px-4 py-2 rounded"
+                                            className="text-red-600 bg-red-300 rounded-full p-2 hover:bg-red-200 transition-colors"
                                         >
-                                            Delete
+                                            <MdDeleteOutline size={24} />
                                         </button>
                                     </td>
                                 </tr>

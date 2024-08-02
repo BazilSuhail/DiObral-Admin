@@ -10,6 +10,9 @@ module.exports = {
       colors: {
         'custom-back-grey': '#6d5700e7',
         'custom-blue': '#001433',
+        'custom-red': '#1a0303',
+        'dark-red': '#C8102E', // Darker red for text
+        'light-red': '#F8D7DA', // Lighter red for background
       },
       fontSize: {
         'custom-sz': '25px',

@@ -21,7 +21,7 @@ const ProductEditModal = ({ isOpen, onClose, product, onSave }) => {
         image4: null,
         image5: null,
     });
-    
+
     const [subcategories, setSubcategories] = useState([]);
     const [existingImages, setExistingImages] = useState({
         mainImage: '',
@@ -133,12 +133,12 @@ const ProductEditModal = ({ isOpen, onClose, product, onSave }) => {
     if (!isOpen) return null;
 
     return (
-        <div className='fixed inset-0 overflow-y-auto bg-gray-500 bg-opacity-75 flex justify-center items-center'>
-            <div className='bg-white p-4 rounded-lg mt-[650px] shadow-md max-w-lg w-full'>
-                <h2 className='text-xl font-semibold mb-4'>Edit Product</h2>
+        <div className='fixed inset-0 overflow-y-auto bg-red-50 bg-opacity-75 flex justify-center items-center'>
+            <div className='bg-white p-4 shadow-custom-dark rounded-lg mt-[1050px] lg:mt-[950px] w-[90vw] lg:w-[65vw] xl:w-[55vw]'>
+                <h2 className='text-3xl underline text-red-800 font-bold text-center mb-4'>Edit Product Details</h2>
                 <form className='space-y-4'>
                     <div className='flex flex-col'>
-                        <label className='font-medium'>Name:</label>
+                        <label className='font-medium text-red-900'>Name:</label>
                         <input
                             type="text"
                             name="name"
@@ -149,22 +149,22 @@ const ProductEditModal = ({ isOpen, onClose, product, onSave }) => {
                         />
                     </div>
                     <div className='flex flex-col'>
-                        <label className='font-medium'>Description:</label>
+                        <label className='font-medium text-red-900'>Description:</label>
                         <textarea
                             name="description"
                             value={formData.description}
                             onChange={handleChange}
-                            className='border border-gray-300 p-2 rounded'
+                            className='border border-gray-300 p-2 h-[250px] rounded'
                             required
                         />
                     </div>
                     <div className='flex flex-col'>
-                        <label className='font-medium'>Category:</label>
-                        <div className='p-2 border border-gray-300 rounded'>{formData.category || 'Select a subcategory to set category'}</div>
+                        <label className='font-medium text-red-900'>Category:</label>
+                        <div className='p-2 border bg-red-100 text-red-800 font-semibold border-gray-300 rounded'>{formData.category || 'Select a subcategory to set category'}</div>
                     </div>
 
                     <div className='flex flex-col'>
-                        <label className='font-medium'>Subcategory:</label>
+                        <label className='font-medium text-red-900'>Subcategory:</label>
                         <select
                             name="subcategory"
                             value={subcategories.find(sub => sub.name === formData.subcategory)?._id || ""}
@@ -180,7 +180,7 @@ const ProductEditModal = ({ isOpen, onClose, product, onSave }) => {
                     </div>
 
                     <div className='flex flex-col'>
-                        <label className='font-medium'>Size (comma separated):</label>
+                        <label className='font-medium text-red-900'>Size (comma separated):</label>
                         <input
                             type="text"
                             name="size"
@@ -191,7 +191,7 @@ const ProductEditModal = ({ isOpen, onClose, product, onSave }) => {
                         />
                     </div>
                     <div className='flex flex-col'>
-                        <label className='font-medium'>Stock:</label>
+                        <label className='font-medium text-red-900'>Stock:</label>
                         <input
                             type="number"
                             name="stock"
@@ -202,7 +202,7 @@ const ProductEditModal = ({ isOpen, onClose, product, onSave }) => {
                         />
                     </div>
                     <div className='flex flex-col'>
-                        <label className='font-medium'>Price:</label>
+                        <label className='font-medium text-red-900'>Price:</label>
                         <input
                             type="number"
                             name="price"
@@ -213,7 +213,7 @@ const ProductEditModal = ({ isOpen, onClose, product, onSave }) => {
                         />
                     </div>
                     <div className='flex flex-col'>
-                        <label className='font-medium'>Sale (% off):</label>
+                        <label className='font-medium text-red-900'>Sale (% off):</label>
                         <input
                             type="number"
                             name="sale"
@@ -223,34 +223,37 @@ const ProductEditModal = ({ isOpen, onClose, product, onSave }) => {
                         />
                     </div>
 
+                    <div className='font-bold text-lg text-red-700'><span className='underline'>Main Cover Image for Product.</span><span className='text-2xl'>*</span></div>
+
                     <div className='flex flex-col'>
-                        <label className='font-medium'>Main Image:</label>
+                        <label className='font-medium text-red-900'>Main Image:</label>
                         <input
                             type="file"
                             name="mainImage"
                             onChange={handleImageChange}
-                            className='border border-gray-300 p-2 rounded'
+                            className='border border-gray-300 p-2 bg-red-100 file:bg-red-950 file:my-[4px] file:text-red-100 file:rounded-xl file:px-[15px] file:mr-[15px] rounded'
                         />
                         {existingImages.mainImage && (
                             <div className='mt-2'>
-                                <span className='font-medium'>Current Main Image:</span>
+                                <span className='font-medium text-red-900'>Current Main Image:</span>
                                 <p>{existingImages.mainImage}</p>
                             </div>
                         )}
                     </div>
+                    <div className='font-bold text-lg text-red-700'><span className='underline'>Slider Images for Product Description.</span><span className='text-2xl'>*</span></div>
 
                     {[...Array(5)].map((_, index) => (
                         <div key={index} className='flex flex-col'>
-                            <label className='font-medium'>Image {index + 1}:</label>
+                            <label className='font-medium text-red-900'>Image {index + 1}:</label>
                             <input
                                 type="file"
                                 name={`image${index + 1}`}
                                 onChange={handleImageChange}
-                                className='border border-gray-300 p-2 rounded'
+                                className='border border-gray-300 p-2 bg-red-100 file:bg-red-950 file:my-[4px] file:text-red-100 file:rounded-xl file:px-[15px] file:mr-[15px] rounded'
                             />
                             {existingImages[`image${index + 1}`] && (
                                 <div className='mt-2'>
-                                    <span className='font-medium'>Current Image {index + 1}:</span>
+                                    <span className='font-medium text-red-900'>Current Image {index + 1}:</span>
                                     <p>{existingImages[`image${index + 1}`]}</p>
                                 </div>
                             )}
@@ -258,8 +261,8 @@ const ProductEditModal = ({ isOpen, onClose, product, onSave }) => {
                     ))}
 
                     <div className='flex justify-end space-x-4 mt-4'>
-                        <button type="button" onClick={handleSave} className='bg-blue-500 text-white py-2 px-4 rounded'>Save</button>
-                        <button type="button" onClick={onClose} className='bg-gray-500 text-white py-2 px-4 rounded'>Cancel</button>
+                        <button type="button" onClick={handleSave} className='bg-blue-700 text-white py-2 px-4 rounded'>Save</button>
+                        <button type="button" onClick={onClose} className='bg-red-500 text-white py-2 px-4 rounded'>Cancel</button>
                     </div>
                 </form>
             </div>
@@ -305,41 +308,49 @@ const ProductList = () => {
     return (
 
         <div className='ml-[10px] xsx:ml-[285px] mr-[12px] flex flex-col'>
-            <table className="min-w-full bg-white border border-gray-300 mt-4">
-                <thead>
-                    <tr>
-                        <th className="border px-4 py-2">Name</th>
-                        <th className="border px-4 py-2">Subcategory</th>
-                        <th className="border px-4 py-2">Stock</th>
-                        <th className="border px-4 py-2">Price</th>
-                        <th className="border px-4 py-2">Actions</th>
-                    </tr>
-                </thead>
-                <tbody className='bg-white divide-y divide-gray-200'>
-                    {products.map(product => (
-                        <tr key={product._id}>
-                            <td className="border px-4 py-2">{product.name}</td>
-                            <td className="border px-4 py-2">{product.subcategory}</td>
-                            <td className="border px-4 py-2">{product.stock}</td>
-                            <td className="border px-4 py-2">${product.price}</td>
-                            <td className="border px-4 py-2">
-                                <button
-                                    onClick={() => handleEdit(product)}
-                                    className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                                >
-                                    Edit
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(product._id)}
-                                    className="bg-red-500 text-white px-4 py-2 rounded"
-                                >
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <div className='my-[8px] flex flex-col w-[100%] py-[35px] px-[15px] justify-center bg-red-50 rounded-xl overflow-x-auto'>
+                <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                    <h2 className='text-2xl text-red-900 mb-[8px] font-bold '>Products Added</h2>
+                    <table className="w-full text-lg text-left text-gray-500 dark:text-gray-400">
+                        <thead className="text-xs text-red-900 uppercase bg-gray-50 dark:bg-red-900  dark:text-red-200">
+
+                            <tr>
+                                <th scope="col" className="whitespace-nowrap text-center  px-6 py-3">Name</th>
+                                <th scope="col" className="whitespace-nowrap text-center  px-6 py-3">Stock</th>
+                                <th scope="col" className="whitespace-nowrap text-center  px-6 py-3">Subcategory</th>
+                                <th scope="col" className="whitespace-nowrap text-center  px-6 py-3">Price</th>
+                                <th scope="col" className="whitespace-nowrap text-center  px-6 py-3">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className='bg-white divide-y divide-gray-200'>
+                            {products.map(product => (
+                                <tr key={product._id} className='text-center odd:bg-white even:bg-red-100 text-custom-blue  border-b'>
+                                    <th th scope="row" class="px-6 py-4 font-bold whitespace-nowrap">{product.name}</th>
+                                    <td className="whitespace-nowrap text-center font-semibold text-red-700 px-6 py-4">{product.stock}</td>
+                                    <td className="whitespace-nowrap text-center px-6 py-4"><span className='bg-red-800 text-white py-[4px] font-medium px-[10px] rounded-lg'>{product.subcategory}</span></td>
+                                    <td className="whitespace-nowrap text-center px-6 py-4">${product.price}</td>
+                                    <td className="whitespace-nowrap text-center px-6 py-4">
+                                        <button
+                                            onClick={() => handleEdit(product)}
+                                            className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(product._id)}
+                                            className="bg-red-500 text-white px-4 py-2 rounded"
+                                        >
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
             {showModal && (
                 <ProductEditModal
                     isOpen={showModal} // Pass the modal open state

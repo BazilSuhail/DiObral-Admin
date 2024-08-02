@@ -39,12 +39,12 @@ const UsersOrders = () => {
         return <p>Error: {error}</p>;
     }
 
-    const handleViewOrders = (documentId) => {
-        navigate(`/admin-orders-list/orders/${documentId}`);
+    const handleViewOrders = (documentId,userId) => {
+        navigate(`/admin-orders-list/${userId}/${documentId}`);
     };
 
     return (
-        <div className="container mx-auto p-4">
+        <div className='ml-[10px] xsx:ml-[285px] mr-[12px] flex flex-col'>
             <h1 className="text-2xl font-bold mb-4">Users with Orders</h1>
             <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
                 <thead>
@@ -64,7 +64,7 @@ const UsersOrders = () => {
                             <td className="py-2 px-4">
                                 <button
                                     className="bg-blue-500 text-white px-4 py-2 rounded"
-                                    onClick={() => handleViewOrders(user.documentId)}
+                                    onClick={() => handleViewOrders(user.documentId,user.userId)}
                                 >
                                     View Orders
                                 </button>

@@ -27,8 +27,8 @@ const App = () => {
         <Route exact path="/addProduct" element={<AddProductForm />} />
         <Route exact path="/productList" element={<ProductList />} />
         <Route exact path="/admin-orders-list" element={<UsersOrders />} />
-        <Route exact path="/admin-orders-list/orders/:documentId" element={<ShowOrders />} />
-        <Route exact path="/order-details" element={<OrderDetails />} />
+        <Route exact path="/admin-orders-list/:userId/:documentId" element={<ShowOrders />} />
+        <Route exact path="/:userId/order-details" element={<OrderDetails />} />
 
 
       </Routes>

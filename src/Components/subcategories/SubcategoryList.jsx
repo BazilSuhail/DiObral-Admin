@@ -1,6 +1,6 @@
 // src/components/SubcategoryList.js
 import React, { useEffect, useState } from 'react';
-import axios from 'axios'; 
+import axios from 'axios';
 
 
 const SubcategoryModal = ({ selectedSubcategory, onSuccess, onClose }) => {
@@ -79,12 +79,12 @@ const SubcategoryModal = ({ selectedSubcategory, onSuccess, onClose }) => {
   return (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-        <h2 className="text-2xl font-bold mb-4">
-          {selectedSubcategory ? 'Edit Subcategory' : 'Create Subcategory'}
-        </h2>
+
+
+        <h2 className='text-2xl underline text-red-800 font-bold text-center mb-4'>Edit Category Details</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="name" className="block text-gray-700">Subcategory Name:</label>
+            <label htmlFor="name" className="block  font-medium text-red-700">Subcategory Name:</label>
             <input
               type="text"
               id="name"
@@ -96,7 +96,7 @@ const SubcategoryModal = ({ selectedSubcategory, onSuccess, onClose }) => {
             />
           </div>
           <div>
-            <label htmlFor="description" className="block text-gray-700">Description:</label>
+            <label htmlFor="description" className="block  font-medium text-red-700">Description:</label>
             <textarea
               id="description"
               name="description"
@@ -108,7 +108,7 @@ const SubcategoryModal = ({ selectedSubcategory, onSuccess, onClose }) => {
             ></textarea>
           </div>
           <div>
-            <label htmlFor="category" className="block text-gray-700">Category:</label>
+            <label htmlFor="category" className="block  font-medium text-red-700">Category:</label>
             <select
               id="category"
               name="category"
@@ -203,8 +203,47 @@ const SubcategoryList = () => {
 
   return (
     <div className='ml-[10px] xsx:ml-[285px] mr-[12px] flex flex-col'>
-      <h1 className="text-2xl font-bold mb-4">Subcategory Management</h1>
-      
+
+      <h2 className='text-3xl underline my-[10px] text-red-900 font-bold '>Sub-Categories Detials</h2>
+      {/* Table for displaying subcategories */}
+      <div className='my-[8px] flex flex-col w-[100%] py-[35px] px-[15px] justify-center border border-red-200 bg-red-50 rounded-xl overflow-x-auto'>
+        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+          <table className="w-full text-lg text-left text-gray-500 dark:text-gray-400">
+            <thead className="text-sm text-red-900 uppercase bg-gray-50 dark:bg-red-900  dark:text-red-200">
+
+              <tr>
+                <th scope="col" className="whitespace-nowrap text-center  px-6 py-3">Name</th>
+                <th scope="col" className="whitespace-nowrap text-center  px-6 py-3">Description</th>
+                <th scope="col" className="whitespace-nowrap text-center  px-6 py-3">Category</th>
+                <th scope="col" className="whitespace-nowrap text-center  px-6 py-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {subcategories.map(subcategory => (
+                <tr key={subcategory._id} className='text-center odd:bg-white even:bg-red-100 text-custom-blue border-b'>
+                  <th th scope="row" class="px-6 py-4 font-bold whitespace-nowrap">{subcategory.name}</th>
+                  <td className="whitespace-nowrap text-center px-6 py-4">{subcategory.description}</td>
+                  <td className="whitespace-nowrap text-center px-6 py-4"><span className='bg-red-800 text-white py-[4px] font-medium px-[6px] rounded-lg'>{subcategory.category}</span></td>
+                  <td className="whitespace-nowrap text-center px-6 py-4">
+                    <button
+                      onClick={() => handleEdit(subcategory)}
+                      className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(subcategory._id)}
+                      className="bg-red-500 text-white px-4 py-2 rounded"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
       {/* Display form for creating or editing a subcategory */}
       {selectedSubcategory && (
         <SubcategoryModal
@@ -213,41 +252,6 @@ const SubcategoryList = () => {
           onClose={() => setSelectedSubcategory(null)} // Close the form when done
         />
       )}
-
-      {/* Table for displaying subcategories */}
-      <table className="min-w-full bg-white border border-gray-300 mt-4">
-        <thead>
-          <tr>
-            <th className="border px-4 py-2">Name</th>
-            <th className="border px-4 py-2">Description</th>
-            <th className="border px-4 py-2">Category</th>
-            <th className="border px-4 py-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {subcategories.map(subcategory => (
-            <tr key={subcategory._id}>
-              <td className="border px-4 py-2">{subcategory.name}</td>
-              <td className="border px-4 py-2">{subcategory.description}</td>
-              <td className="border px-4 py-2">{subcategory.category}</td>
-              <td className="border px-4 py-2">
-                <button
-                  onClick={() => handleEdit(subcategory)}
-                  className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(subcategory._id)}
-                  className="bg-red-500 text-white px-4 py-2 rounded"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </div>
   );
 };

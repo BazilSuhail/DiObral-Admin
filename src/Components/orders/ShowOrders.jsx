@@ -4,6 +4,8 @@ import axios from 'axios';
 
 const ShowOrders = () => {
     const { documentId } = useParams();
+    const { userId } = useParams();
+    //console.log(userId);
     const [order, setOrder] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -33,11 +35,11 @@ const ShowOrders = () => {
     }
 
     const handleViewDetails = (orderItem) => {
-        navigate('/order-details', { state: { orderItem } });
+        navigate(`/${userId}/order-details`, { state: { orderItem } });
     };
 
     return (
-        <div className="container mx-auto p-4">
+        <div className='ml-[10px] xsx:ml-[285px] mr-[12px] flex flex-col'>  
             <h1 className="text-2xl font-bold mb-4">Order Details</h1>
             {order ? (
                 <div>

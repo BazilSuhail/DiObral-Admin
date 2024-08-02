@@ -124,120 +124,127 @@ const AddProductForm = () => {
 
     return (
         <div className='ml-[10px] xsx:ml-[285px] mr-[12px] flex flex-col'>
-            <h2 className='text-xl font-semibold mb-4'>Add Product</h2>
-            <form onSubmit={handleSubmit} className='space-y-4'>
-                <div className='flex flex-col'>
-                    <label className='font-medium'>Name:</label>
-                    <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className='border border-gray-300 p-2 rounded'
-                        required
-                    />
-                </div>
-                <div className='flex flex-col'>
-                    <label className='font-medium'>Description:</label>
-                    <textarea
-                        name="description"
-                        value={formData.description}
-                        onChange={handleChange}
-                        className='border border-gray-300 p-2 rounded'
-                        required
-                    />
-                </div>
-                <div className='flex flex-col'>
-                    <label className='font-medium'>Category:</label>
-                    <div className='p-2 border border-gray-300 rounded'>{formData.category || 'Select a subcategory to set category'}</div>
-                </div>
+            <h2 className='text-[28px] text-red-800 underline font-bold mt-[25px] mb-4'>Add Product</h2>
 
-                <div className='flex flex-col'>
-                    <label className='font-medium'>Subcategory:</label>
-                    <select
-                        name="subcategory"
-                        value={subcategories.find(sub => sub.name === formData.subcategory)?._id || ""}
-                        onChange={handleSubcategoryChange}
-                        className='border border-gray-300 p-2 rounded'
-                        required
-                    >
-                        <option value="">Select a subcategory</option>
-                        {subcategories.map(subcat => (
-                            <option key={subcat._id} value={subcat._id}>{subcat.name}</option>
-                        ))}
-                    </select>
-                </div>
-
-                <div className='flex flex-col'>
-                    <label className='font-medium'>Size (comma separated):</label>
-                    <input
-                        type="text"
-                        name="size"
-                        value={formData.size}
-                        onChange={handleChange}
-                        className='border border-gray-300 p-2 rounded'
-                        required
-                    />
-                </div>
-                <div className='flex flex-col'>
-                    <label className='font-medium'>Stock:</label>
-                    <input
-                        type="number"
-                        name="stock"
-                        value={formData.stock}
-                        onChange={handleChange}
-                        className='border border-gray-300 p-2 rounded'
-                        required
-                    />
-                </div>
-                <div className='flex flex-col'>
-                    <label className='font-medium'>Price:</label>
-                    <input
-                        type="number"
-                        name="price"
-                        value={formData.price}
-                        onChange={handleChange}
-                        className='border border-gray-300 p-2 rounded'
-                        required
-                    />
-                </div>
-                <div className='flex flex-col'>
-                    <label className='font-medium'>Sale (% off):</label>
-                    <input
-                        type="number"
-                        required
-                        name="sale"
-                        value={formData.sale}
-                        onChange={handleChange}
-                        className='border border-gray-300 p-2 rounded'
-                    />
-                </div>
-                <div className='flex flex-col'>
-                    <label className='font-medium'>Main Image:</label>
-                    <input
-                        type="file"
-                        name="mainImage"
-                        onChange={handleImageChange}
-                        className='border border-gray-300 p-2 rounded'
-                        required
-                    />
-                </div>
-                {[...Array(5)].map((_, index) => (
-                    <div key={index} className='flex flex-col'>
-                        <label className='font-medium'>Image {index + 1}:</label>
+            <div className='my-[8px] flex flex-col w-[100%] py-[35px] px-[15px] justify-center bg-red-50 rounded-xl overflow-x-auto'>
+                <form onSubmit={handleSubmit} className='space-y-4'>
+                    <div className='flex flex-col'>
+                        <label className='font-medium text-red-800'>Name:</label>
                         <input
-                            type="file"
-                            name={`image${index + 1}`}
-                            onChange={handleImageChange}
-                            className='border border-gray-300 p-2 rounded'
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            className='border-2 border-red-200 p-2 rounded-lg'
                             required
                         />
                     </div>
-                ))}
-                <button type="submit" className='bg-blue-500 text-white p-2 rounded hover:bg-blue-600'>
-                    Add Product
-                </button>
-            </form>
+                    <div className='flex flex-col'>
+                        <label className='font-medium text-red-800'>Description:</label>
+                        <textarea
+                            name="description"
+                            value={formData.description}
+                            onChange={handleChange}
+                            className='border-2 border-red-200 p-2 rounded'
+                            required
+                        />
+                    </div>
+                    <div className='flex flex-col'>
+                        <label className='font-medium text-red-800'>Category:</label>
+                        <div className='p-2 text-white bg-red-900 rounded'>{formData.category || 'Select a subcategory to set category'}</div>
+                    </div>
+
+                    <div className='flex flex-col'>
+                        <label className='font-medium text-red-800'>Subcategory:</label>
+                        <select
+                            name="subcategory"
+                            value={subcategories.find(sub => sub.name === formData.subcategory)?._id || ""}
+                            onChange={handleSubcategoryChange}
+                            className='border-2 border-red-200 p-2 rounded'
+                            required
+                        >
+                            <option value="">Select a subcategory</option>
+                            {subcategories.map(subcat => (
+                                <option key={subcat._id} value={subcat._id}>{subcat.name}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className='flex flex-col'>
+                        <label className='font-medium text-red-800'>Size (comma separated):</label>
+                        <input
+                            type="text"
+                            name="size"
+                            value={formData.size}
+                            onChange={handleChange}
+                            className='border-2 border-red-200 p-2 rounded'
+                            required
+                        />
+                    </div>
+                    <div className='flex flex-col'>
+                        <label className='font-medium text-red-800'>Stock:</label>
+                        <input
+                            type="number"
+                            name="stock"
+                            value={formData.stock}
+                            onChange={handleChange}
+                            className='border-2 border-red-200 p-2 rounded'
+                            required
+                        />
+                    </div>
+                    <div className='flex flex-col'>
+                        <label className='font-medium text-red-800'>Price:</label>
+                        <input
+                            type="number"
+                            name="price"
+                            value={formData.price}
+                            onChange={handleChange}
+                            className='border-2 border-red-200 p-2 rounded'
+                            required
+                        />
+                    </div>
+                    <div className='flex flex-col'>
+                        <label className='font-medium text-red-800'>Sale (% off):</label>
+                        <input
+                            type="number"
+                            required
+                            name="sale"
+                            value={formData.sale}
+                            onChange={handleChange}
+                            className='border-2 border-red-200 p-2 rounded'
+                        />
+                    </div>
+                    <div className='font-bold text-lg text-red-700'><span className='underline'>Main Image Of Product.</span><span className='text-2xl'>*</span></div>
+
+                    <div className='flex flex-col'>
+                        <label className='font-medium text-red-800'>Main Image:</label>
+                        <input
+                            type="file"
+                            name="mainImage"
+                            onChange={handleImageChange}
+                            className='border border-gray-300 p-2 bg-red-100 file:bg-red-950 file:my-[4px] file:text-red-100 file:rounded-xl file:px-[15px] file:mr-[15px] rounded'
+                            required
+                        />
+                    </div>
+                    <div className='font-bold text-lg text-red-700'><span className='underline'>Slider Images for Product Description.</span><span className='text-2xl'>*</span></div>
+
+                    {[...Array(5)].map((_, index) => (
+                        <div key={index} className='flex flex-col'>
+                            <label className='font-medium text-red-800'>Image {index + 1}:</label>
+                            <input
+                                type="file"
+                                name={`image${index + 1}`}
+                                onChange={handleImageChange}
+                                className='border border-gray-300 p-2 bg-red-100 file:bg-red-950 file:my-[4px] file:text-red-100 file:rounded-xl file:px-[15px] file:mr-[15px] rounded'
+                                required
+                            />
+                        </div>
+                    ))}
+                    <button type="submit" className='bg-blue-500 text-white p-2 rounded hover:bg-blue-600'>
+                        Add Product
+                    </button>
+                </form>
+            </div>
         </div>
     );
 };

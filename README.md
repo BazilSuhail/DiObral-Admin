@@ -1,70 +1,75 @@
-# Getting Started with Create React App
+# Texleath Admin Dashboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+#### `Texleath` Admin Dashboard is the backend management system for your premier clothing e-commerce platform. It provides a sleek and intuitive interface for managing products, orders, users, and reviews, designed to enhance operational efficiency with advanced features and interactive elements.
 
-## Available Scripts
+# Run Locally
 
+ Clone the project using following command
+```bash
+  git clone https://github.com/BazilSuhail/Ecommerce-Admin.git
+```
+Go to the project directory
+```bash
+cd my-project
+```
+Then **Run** this command in your terminal to install all required dependancies:
+```bash
+  npm install
+```
 In the project directory, you can run:
-
-### `npm start`
-
+```bash
+  npm start
+``` 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
+## Features
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Dashboard Overview
+- **Admin Interface**: Sleek and user-friendly design for efficient management of the e-commerce platform.
+- **Analytics**: Overview of key metrics including sales, user activity, and order statistics.
 
-### `npm run build`
+### Product Management
+- **Add Products**: Add new products with comprehensive details including images, descriptions, and pricing.
+- **Update Products**: Edit existing product information, update stock levels, and manage product attributes.
+- **Delete Products**: Remove products from the catalog as needed.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Order Management
+- **View Orders**: Detailed view of orders, including items, quantities, total amounts, and order status.
+- **Update Order Status**: Manage and update the status of orders to reflect their current state.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### User Management
+- **View Users**: Access and view user profiles, including order history and account details.
+- **Update User Information**: Edit user profiles, including full name, email, and phone number.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Review Management
+- **View Reviews**: Display and manage reviews submitted by users for products.
+- **Moderate Reviews**: Approve or remove reviews based on content and compliance.
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+# Live Demo
+## Check out the latest demo of Project [Texleath](https://texleath.netlify.app). 
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## In case this doesnt work, follow these steps as an alternative and Install required Dependancies
+At first create a React App using following command:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+   npx create-react-app myproject
+```
+ Clone the project using following command
+```bash
+  git clone  https://github.com/BazilSuhail/Ecommerce-Admin.git
+```
+Go to the project directory
+```bash
+cd my-project
+```
+Just for convenience copy all contents in the cloned repository and paste them into the directory where You have 
+created your **React App**.
+ 
+Afterwards simply run this command to install all required dependancies and packages at once.
+```bash
+npm i react-redux react-icons react-router-dom axios
+``` 
+  

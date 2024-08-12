@@ -36,6 +36,7 @@ const OrderDetails = () => {
                             <p className="text-red-100 text-lg"><span className='mr-[8px] font-medium text-red-300'>Price:</span> ${item.price.toFixed(2)}</p>
                             <p className="text-red-100 text-lg"><span className='mr-[8px] font-medium text-red-300'>Discounted Price:</span> ${item.discountedPrice.toFixed(2)}</p>
                             <p className="text-red-100 text-lg"><span className='mr-[8px] font-medium text-red-300'>Quantity:</span> {item.quantity}</p>
+                            <p className="text-red-100 text-lg"><span className='mr-[8px] font-medium text-red-300'>Selected:</span> {item.size}</p>
                         </div>
                     ))}
                 </div>

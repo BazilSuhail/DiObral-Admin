@@ -22,7 +22,7 @@ const SubcategoryManager = () => {
   useEffect(() => {
     const fetchSubcategories = async () => {
       try {
-        const res = await axios.get('http://localhost:3001/api/subcategories');
+        const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/subcategories`);
         setSubcategories(res.data);
       } catch (error) {
         console.error('Error fetching subcategories:', error);
@@ -31,7 +31,7 @@ const SubcategoryManager = () => {
 
     const fetchCategories = async () => {
       try {
-        const res = await axios.get('http://localhost:3001/api/category');
+        const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/category`);
         setCategories(res.data);
       } catch (error) {
         console.error('Error fetching categories:', error);
@@ -68,16 +68,16 @@ const SubcategoryManager = () => {
     try {
       if (selectedSubcategory) {
         // Update existing subcategory
-        await axios.put(`http://localhost:3001/api/subcategories/${selectedSubcategory._id}`, formData);
+        await axios.put(`${process.env.REACT_APP_API_BASE_URL}/subcategories/${selectedSubcategory._id}`, formData);
       } else {
         // Create new subcategory
-        await axios.post('http://localhost:3001/api/subcategories', formData);
+        await axios.post(`${process.env.REACT_APP_API_BASE_URL}/subcategories`, formData);
       }
       setFormData({ name: '', description: '', category: '' });
       setSelectedSubcategory(null);
       setModalOpen(false);
       // Refresh the list
-      const res = await axios.get('http://localhost:3001/api/subcategories');
+      const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/subcategories`);
       setSubcategories(res.data);
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -87,7 +87,7 @@ const SubcategoryManager = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this subcategory?')) {
       try {
-        await axios.delete(`http://localhost:3001/api/subcategories/${id}`);
+        await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/subcategories/${id}`);
         setSubcategories(subcategories.filter(sub => sub._id !== id));
       } catch (error) {
         console.error('Error deleting subcategory:', error);

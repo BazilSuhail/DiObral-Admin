@@ -26,7 +26,7 @@ const AddProductForm = () => {
         // Fetch available subcategories
         const fetchSubcategories = async () => {
             try {
-                const res = await axios.get('http://localhost:3001/api/subcategories'); // Update the URL to your API endpoint for subcategories
+                const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/subcategories`); // Update the URL to your API endpoint for subcategories
                 setSubcategories(res.data);
             } catch (error) {
                 console.error('Error fetching subcategories:', error);
@@ -83,7 +83,7 @@ const AddProductForm = () => {
         });
 
         try {
-            const response = await axios.post('http://localhost:3001/api/products/add', formDataToSend, {
+            const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/products/add`, formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

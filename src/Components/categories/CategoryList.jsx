@@ -33,7 +33,7 @@ const CategoryForm = ({ category, onClose, onUpdate, onCreate }) => {
     if (category) {
       // Update existing category
       try {
-        const response = await axios.put(`http://localhost:3001/api/category/${category._id}`, formData);
+        const response = await axios.put(`${process.env.REACT_APP_API_BASE_URL}/category/${category._id}`, formData);
         onUpdate(response.data.category);
       } catch (error) {
         console.error('Error updating category:', error);
@@ -41,7 +41,7 @@ const CategoryForm = ({ category, onClose, onUpdate, onCreate }) => {
     } else {
       // Create new category
       try {
-        const response = await axios.post('http://localhost:3001/api/category/add-category', formData);
+        const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/category/add-category`, formData);
         onCreate(response.data.category);
       } catch (error) {
         console.error('Error creating category:', error);
@@ -53,7 +53,7 @@ const CategoryForm = ({ category, onClose, onUpdate, onCreate }) => {
   const handleDelete = async () => {
     if (category && window.confirm('Are you sure you want to delete this category?')) {
       try {
-        await axios.delete(`http://localhost:3001/api/category/${category._id}`);
+        await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/category/${category._id}`);
         onClose();
       } catch (error) {
         console.error('Error deleting category:', error);
@@ -132,7 +132,7 @@ const CategoriesList = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/category');
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/category`);
         setCategories(response.data);
       } catch (error) {
         console.error('Error fetching categories:', error);
@@ -144,7 +144,7 @@ const CategoriesList = () => {
 
   const handleEdit = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:3001/api/category/${id}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/category/${id}`);
       setSelectedCategory(response.data);
     } catch (error) {
       console.error('Error fetching category:', error);
@@ -166,7 +166,7 @@ const CategoriesList = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this category?')) {
       try {
-        await axios.delete(`http://localhost:3001/api/category/${id}`);
+        await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/category/${id}`);
         setCategories(categories.filter(category => category._id !== id));
       } catch (error) {
         console.error('Error deleting category:', error);

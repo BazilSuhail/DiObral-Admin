@@ -13,7 +13,7 @@ const UsersOrders = () => {
         // Fetch user data from the server
         const fetchUsersWithOrders = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/api/completeorder/users-with-orders'); // Adjust the endpoint as necessary
+                const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/completeorder/users-with-orders`); // Adjust the endpoint as necessary
                 const fetchedUsers = response.data;
 
                 // Log each documentId and their associated orders

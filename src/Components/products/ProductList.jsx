@@ -9,7 +9,7 @@ const ProductEditModal = ({ isOpen, onClose, product, onSave }) => {
         name: '',
         description: '',
         category: '',
-        subcategory: '', // Store subcategory name instead of ID
+        subcategory: '',
         size: '',
         stock: '',
         price: '',
@@ -39,7 +39,7 @@ const ProductEditModal = ({ isOpen, onClose, product, onSave }) => {
             // Fetch available subcategories
             const fetchSubcategories = async () => {
                 try {
-                    const res = await axios.get('http://localhost:3001/api/subcategories'); // Update URL to your API endpoint for subcategories
+                    const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/subcategories`); // Update URL to your API endpoint for subcategories
                     setSubcategories(res.data);
 
                     if (product) {
@@ -119,13 +119,13 @@ const ProductEditModal = ({ isOpen, onClose, product, onSave }) => {
         });
 
         try {
-            await axios.put(`http://localhost:3001/api/products/${product._id}`, formDataToSend, {
+            await axios.put(`${process.env.REACT_APP_API_BASE_URL}/products/${product._id}`, formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            onSave(); // Callback to refresh or update the product list
-            onClose(); // Close the modal after saving
+            onSave();
+            onClose();
         } catch (error) {
             alert('Error updating product');
             console.error(error);
@@ -283,7 +283,8 @@ const ProductList = () => {
         // Fetch products from the server
         const fetchProducts = async () => {
             try {
-                const res = await axios.get('http://localhost:3001/api/products'); // Update with your endpoint
+                console.log(process.env.REACT_APP_API_BASE_URL)
+                const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/products`);
                 setProducts(res.data);
             } catch (error) {
                 console.error('Error fetching products:', error);
@@ -300,7 +301,7 @@ const ProductList = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:3001/api/products/${id}`); // Update with your endpoint
+            await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/products/${id}`); // Update with your endpoint
             setProducts(products.filter(product => product._id !== id));
         } catch (error) {
             console.error('Error deleting product:', error);
@@ -358,13 +359,12 @@ const ProductList = () => {
             </div>
             {showModal && (
                 <ProductEditModal
-                    isOpen={showModal} // Pass the modal open state
-                    onClose={() => setShowModal(false)} // Pass the function to close the modal
-                    product={selectedProduct} // Pass the currently selected product
-                    onSave={async () => {
-                        // Fetch updated product list after saving
+                    isOpen={showModal}
+                    onClose={() => setShowModal(false)}
+                    product={selectedProduct}
+                    onSave={async () => { 
                         try {
-                            const res = await axios.get('http://localhost:3001/api/products');
+                            const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/products`);
                             setProducts(res.data);
                         } catch (error) {
                             console.error('Error fetching updated products:', error);

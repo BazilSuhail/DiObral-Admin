@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+
 const CategoryForm = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -18,7 +19,7 @@ const CategoryForm = () => {
     e.preventDefault();
     
     try {
-      const response = await axios.post('http://localhost:3001/api/category/add-category', formData);
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/category/add-category `, formData);
       alert(response.data.message);
       setFormData({ name: '', description: '' }); // Clear form after submission
     } catch (error) {

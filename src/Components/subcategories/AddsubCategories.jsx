@@ -9,7 +9,7 @@ const SubcategoryCreationForm = ({ selectedSubcategory, onSuccess }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get('http://localhost:3001/api/category/');
+        const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/category/`);
         console.log('Categories fetched:', res.data); // Debug: Log fetched categories
         setCategories(res.data);
       } catch (error) {
@@ -42,10 +42,10 @@ const SubcategoryCreationForm = ({ selectedSubcategory, onSuccess }) => {
     try {
       if (selectedSubcategory) {
         // Update existing subcategory
-        await axios.put(`http://localhost:3001/api/subcategories/${selectedSubcategory._id}`, form);
+        await axios.put(`${process.env.REACT_APP_API_BASE_URL}/subcategories/${selectedSubcategory._id}`, form);
       } else {
         // Create new subcategory
-        await axios.post('http://localhost:3001/api/subcategories', form);
+        await axios.post(`${process.env.REACT_APP_API_BASE_URL}/subcategories`, form);
       }
       alert('Subcategory has been successfully saved!'); // Alert on success
       setForm({ name: '', description: '', category: '' }); // Clear form fields

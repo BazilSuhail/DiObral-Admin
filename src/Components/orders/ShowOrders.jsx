@@ -14,7 +14,7 @@ const ShowOrders = () => {
     useEffect(() => {
         const fetchOrder = async () => {
             try {
-                const response = await axios.get(`http://localhost:3001/api/completeorder/orders/${documentId}`);
+                const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/completeorder/orders/${documentId}`);
                 setOrder(response.data);
             } catch (err) {
                 setError(err.message);

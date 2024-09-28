@@ -206,8 +206,7 @@ const AddProductForm = () => {
                     <div className='flex flex-col'>
                         <label className='font-medium text-red-800'>Sale (% off):</label>
                         <input
-                            type="number"
-                            required
+                            type="number" 
                             name="sale"
                             value={formData.sale}
                             onChange={handleChange}
@@ -223,7 +222,7 @@ const AddProductForm = () => {
                             name="mainImage"
                             onChange={handleImageChange}
                             className='border border-gray-300 p-2 bg-red-100 file:bg-red-950 file:my-[4px] file:text-red-100 file:rounded-xl file:px-[15px] file:mr-[15px] rounded'
-                            required
+                    
                         />
                     </div>
                     <div className='font-bold text-lg text-red-700'><span className='underline'>Slider Images for Product Description.</span><span className='text-2xl'>*</span></div>
@@ -236,7 +235,7 @@ const AddProductForm = () => {
                                 name={`image${index + 1}`}
                                 onChange={handleImageChange}
                                 className='border border-gray-300 p-2 bg-red-100 file:bg-red-950 file:my-[4px] file:text-red-100 file:rounded-xl file:px-[15px] file:mr-[15px] rounded'
-                                required
+                              
                             />
                         </div>
                     ))}

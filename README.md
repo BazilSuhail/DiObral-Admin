@@ -70,6 +70,6 @@ created your **React App**.
  
 Afterwards simply run this command to install all required dependancies and packages at once.
 ```bash
-npm i react-redux react-icons react-router-dom axios
+npm i react-icons react-router-dom axios
 ``` 
   

@@ -30,9 +30,7 @@ const Navbar = () => {
 
     return (
         <nav className="xsx">
-            {/* Navbar for larger screens */}
-
-            <div className=" hidden bg-gradient-to-r from-red-950 via-custom-red to-red-900 fixed xsx:flex pl-[25px] xsx:flex-col xsx:justify-between shadow-xl rounded-lg xsx:items-center ml-[-20px] w-[280px] h-screen  p-[10px]">
+            <div className=" hidden bg-[#3e0909] fixed xsx:flex pl-[25px] xsx:flex-col xsx:justify-between shadow-xl rounded-lg xsx:items-center ml-[-20px] w-[280px] h-screen  p-[10px]">
                 <div className="flex text-red-50 flex-col w-[95%]">
 
                     <div className="pt-[5px] xsx:flex flex-col hidden items-center justify-center pb-[5px] overflow-hidden">

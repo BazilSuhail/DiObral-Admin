@@ -119,7 +119,7 @@ const SubcategoryManager = () => {
       </h2>
       <div className='flex flex-col w-[100%] justify-center rounded-xl overflow-x-auto'>
 
-        <div className='flex items-center mb-[12px] justify-between w-full'>
+        <div className='flex lg:items-center mb-[12px] lg:flex-row flex-col lg:justify-between w-full'>
           <p className='text-lg font-[600] text-red-700'>Create,edit and Manage sub-categories</p>
           <button onClick={handleCreate} className="scale-[0.7] lg:scale-[0.85] bg-red-900 hover:text-red-900 hover:bg-red-100 text-red-100  flex items-center rounded-[25px] px-[15px] py-[8px]">
             <IoMdAddCircleOutline className='text-[30px]' />
@@ -165,7 +165,7 @@ const SubcategoryManager = () => {
           </table>
         </div>
       </div>
- 
+
       {modalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">

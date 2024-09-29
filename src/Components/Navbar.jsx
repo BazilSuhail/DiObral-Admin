@@ -27,7 +27,7 @@ const Navbar = () => {
 
                     <div className="w-[95%] rounded-lg mt-[10px] h-[3px] bg-red-50 mx-auto my-[5px]"></div>
 
-                    <NavLink to="/student-profile" className={({ isActive }) => `flex mt-[55px] mb-[7px] items-center py-[3px] px-2 rounded-md ${isActive ? 'bg-red-50 text-red-800' : 'hover:bg-red-50 hover:rounded-2xl hover:text-red-900 text-red-50'}`} >
+                    <NavLink to="/" className={({ isActive }) => `flex mt-[55px] mb-[7px] items-center py-[3px] px-2 rounded-md ${isActive ? 'bg-red-50 text-red-800' : 'hover:bg-red-50 hover:rounded-2xl hover:text-red-900 text-red-50'}`} >
                         <MdOutlineSpaceDashboard className="text-[20px] mb-[3px] mr-[12px]" /><p className="mb-[2px] font-[500] text-[18px]">Dashboard</p>
                     </NavLink>
                     <NavLink to="/categoryList" className={({ isActive }) => `flex mb-[7px] items-center py-[3px] px-2 rounded-md ${isActive ? 'bg-red-50 text-red-800' : 'hover:bg-red-50 hover:rounded-2xl hover:text-red-900 text-red-50'}`} >
@@ -124,14 +124,13 @@ const Navbar = () => {
                             className="fixed inset-0 bg-navbar-color bg-gradient-to-r from-red-950 to-red-900 flex w-[70vw] flex-col h-screen px-[5px] py-3 z-30"
 
                         >
-                            <div className=''></div> 
                             <motion.div
                                 initial={{ x: -100, opacity: 0 }}
                                 animate={{ x: 0, opacity: 1, transition: { duration: 0.5, delay: 0.3 } }}
                                 exit={{ x: -100, opacity: 0, transition: { duration: 0.2 } }}
                                 className="flex flex-col mt-[25px]"
                             >
-                                <NavLink to="/student-profile" className={({ isActive }) => `flex mt-[55px] mb-[7px] items-center py-[3px] px-2 rounded-md ${isActive ? 'bg-red-50 text-red-800' : 'hover:bg-red-50 hover:rounded-2xl hover:text-red-900 text-red-50'}`} >
+                                <NavLink to="/" className={({ isActive }) => `flex mt-[55px] mb-[7px] items-center py-[3px] px-2 rounded-md ${isActive ? 'bg-red-50 text-red-800' : 'hover:bg-red-50 hover:rounded-2xl hover:text-red-900 text-red-50'}`} >
                                     <MdOutlineSpaceDashboard className="text-[20px] mb-[3px] mr-[12px]" /><p className="mb-[2px] font-[500] text-[18px]">Dashboard</p>
                                 </NavLink>
                                 <NavLink to="/categoryList" className={({ isActive }) => `flex mb-[7px] items-center py-[3px] px-2 rounded-md ${isActive ? 'bg-red-50 text-red-800' : 'hover:bg-red-50 hover:rounded-2xl hover:text-red-900 text-red-50'}`} >

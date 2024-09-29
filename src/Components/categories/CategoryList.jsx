@@ -183,7 +183,7 @@ const CategoriesList = () => {
 
       <div className='my-[8px] flex flex-col w-[100%] pb-[35px] px-[15px] justify-center rounded-xl overflow-x-auto'>
 
-        <div className='flex items-center mb-[12px] justify-between w-full'>
+        <div className='flex lg:items-center mb-[12px] lg:flex-row flex-col lg:justify-between w-full'>
           <p className='text-lg font-[600] text-red-700'>Create,edit and Manage Categories</p>
           <button onClick={() => setShowCreateForm(true)} className="scale-[0.7] lg:scale-[0.85] bg-red-900 hover:text-red-900 hover:bg-red-100 text-red-100  flex items-center rounded-[25px] px-[15px] py-[8px]">
             <IoMdAddCircleOutline className='text-[30px]' />

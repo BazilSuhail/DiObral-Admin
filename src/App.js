@@ -12,6 +12,7 @@ import ProductList from "./Components/products/ProductList";
 import UsersOrders from "./Components/orders/UserOrders";
 import ShowOrders from "./Components/orders/ShowOrders";
 import OrderDetails from "./Components/orders/OrderDetails";
+import OrderTracking from "./Components/orders/OrderTracking";
 
 const App = () => {
   return (
@@ -29,7 +30,7 @@ const App = () => {
         <Route exact path="/admin-orders-list" element={<UsersOrders />} />
         <Route exact path="/admin-orders-list/:userId/:documentId" element={<ShowOrders />} />
         <Route exact path="/:userId/order-details" element={<OrderDetails />} />
-
+        <Route exact path="/order-tracking" element={<OrderTracking />} />
 
       </Routes>
     </Router>

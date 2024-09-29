@@ -39,7 +39,7 @@ const ShowOrders = () => {
     };
 
     return (
-        <div className='ml-[10px] bg-gray-100 xsx:ml-[260px] xsx:px-[20px] pb-[35px] pr-[12px] flex flex-col'>
+        <div className='ml-[10px] bg-gray-100 xsx:ml-[260px] xsx:px-[20px] min-h-screen pb-[35px] pr-[12px] flex flex-col'>
             <h1 className='text-[28px] my-[20px] underline underline-offset-2  text-red-900 font-bold flex items-center'>
                     <FaShoppingCart className='mr-2' />
                     Order Details
@@ -48,8 +48,8 @@ const ShowOrders = () => {
             {order ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {order.orders.map((orderItem, index) => (
-                        <div key={orderItem._id.$oid} className="bg-white p-4 rounded-lg shadow-lg">
-                            <h3 className="text-[30px] mb-[15px] font-semibold text-red-100 flex items-center">
+                        <div key={orderItem._id} className="bg-white p-4 rounded-lg shadow-lg">
+                            <h3 className="text-[30px] mb-[15px] font-semibold text-red-900 flex items-center">
                                 <FaInfoCircle className="text-red-800 mr-2" />
                                 <span className='underline underline-offset-4'>Order {index + 1}</span>
                             </h3>
@@ -66,7 +66,7 @@ const ShowOrders = () => {
                                 <strong className='mr-[8px] text-red-700 fomt-[500]'>Total:</strong> ${orderItem.total.toFixed(2)}
                             </p>
                             <button
-                                className="bg-red-700 mt-[20px] text-white px-4 py-2 rounded-lg hover:bg-red-800 transition duration-300 flex items-center"
+                                className="bg-red-700 mt-[20px] text-white px-4 text-[14px] py-[5px] rounded-lg hover:bg-red-900 transition duration-300 flex items-center"
                                 onClick={() => handleViewDetails(orderItem)}
                             >
                                 <FaInfoCircle className="text-white mr-2" />

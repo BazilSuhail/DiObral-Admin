@@ -48,7 +48,7 @@ const UsersOrders = () => {
 
                 <h2 className='text-[28px] my-[20px] underline underline-offset-2  text-red-900 font-bold flex items-center'>
                     <FaClipboardList className='mr-2' />
-                    User's Orders
+                    User's Orders   
                 </h2>
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table className="w-full text-lg text-left text-gray-500 dark:text-gray-400">

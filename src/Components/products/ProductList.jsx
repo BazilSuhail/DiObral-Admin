@@ -309,7 +309,7 @@ const ProductList = () => {
     };
 
     return (
-        <div className='ml-[10px] bg-gray-100 xsx:ml-[260px] xsx:px-[20px] pb-[35px] pr-[12px] flex flex-col'>
+        <div className='ml-[10px] min-h-screen bg-gray-100 xsx:ml-[260px] xsx:px-[20px] pb-[35px] pr-[12px] flex flex-col'>
 
             <h2 className='text-[28px] my-[25px] underline underline-offset-2 mb-[5px] text-red-900 font-bold flex items-center'>
                 <FaClipboardList className='mr-2' />

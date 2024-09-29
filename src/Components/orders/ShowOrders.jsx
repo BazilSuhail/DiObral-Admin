@@ -39,30 +39,31 @@ const ShowOrders = () => {
     };
 
     return (
-        <div className='ml-[10px] xsx:ml-[285px] mr-[12px] flex flex-col'>
-            <h1 className="text-3xl font-bold mt-[25px] mb-[15px] text-red-600 flex items-center">
-                <FaShoppingCart className="text-red-400 mr-2" />
-                Order Details
-            </h1>
+        <div className='ml-[10px] bg-gray-100 xsx:ml-[260px] xsx:px-[20px] pb-[35px] pr-[12px] flex flex-col'>
+            <h1 className='text-[28px] my-[20px] underline underline-offset-2  text-red-900 font-bold flex items-center'>
+                    <FaShoppingCart className='mr-2' />
+                    Order Details
+                </h1>
+
             {order ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {order.orders.map((orderItem, index) => (
-                        <div key={orderItem._id.$oid} className="border border-red-800 bg-gradient-to-tr from-custom-red via-red-900 to-red-950 p-4 rounded-lg shadow-lg">
+                        <div key={orderItem._id.$oid} className="bg-white p-4 rounded-lg shadow-lg">
                             <h3 className="text-[30px] mb-[15px] font-semibold text-red-100 flex items-center">
-                                <FaInfoCircle className="text-red-400 mr-2" />
+                                <FaInfoCircle className="text-red-800 mr-2" />
                                 <span className='underline underline-offset-4'>Order {index + 1}</span>
                             </h3>
-                            <p className="mt-1 text-red-200 flex items-center">
-                                <FaShoppingCart className="text-red-400 mr-2" />
-                                <strong className='mr-[8px]'>Items Count:</strong> {orderItem.items.length}
+                            <p className="mt-1 flex items-center">
+                                <FaShoppingCart className="text-red-800 mr-2" />
+                                <strong className='mr-[8px] text-red-700 fomt-[500]'>Items Count:</strong> {orderItem.items.length}
                             </p>
-                            <p className="mt-1 text-red-200 flex items-center">
-                                <FaCalendarAlt className="text-red-400 mr-2" />
-                                <strong className='mr-[8px]'>Order Date:</strong> {new Date(orderItem.orderDate).toLocaleDateString()}
+                            <p className="mt-1 flex items-center">
+                                <FaCalendarAlt className="text-red-800 mr-2" />
+                                <strong className='mr-[8px] text-red-700 fomt-[500]'>Order Date:</strong> {new Date(orderItem.orderDate).toLocaleDateString()}
                             </p>
-                            <p className="mt-1 text-red-200 flex items-center">
-                                <FaShoppingCart className="text-red-400 mr-2" />
-                                <strong className='mr-[8px]'>Total:</strong> ${orderItem.total.toFixed(2)}
+                            <p className="mt-1 flex items-center">
+                                <FaShoppingCart className="text-red-800 mr-2" />
+                                <strong className='mr-[8px] text-red-700 fomt-[500]'>Total:</strong> ${orderItem.total.toFixed(2)}
                             </p>
                             <button
                                 className="bg-red-700 mt-[20px] text-white px-4 py-2 rounded-lg hover:bg-red-800 transition duration-300 flex items-center"

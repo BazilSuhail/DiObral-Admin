@@ -14,8 +14,7 @@ const OrderDetails = () => {
     const completeOrder = async () => {
         try {
             await axios.post(`${process.env.REACT_APP_API_BASE_URL}/completeorder/${userId}/${orderItem._id}`);
-            alert('Order completed successfully');
-            // Optionally, redirect or update state
+            alert('Order completed successfully'); 
         } catch (error) {
             alert('Error completing order');
         }

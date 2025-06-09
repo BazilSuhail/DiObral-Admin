@@ -5,7 +5,7 @@ import Navbar from "./Components/Navbar";
 import Dashboard from "./Components/Dashboard";
 import CategoryForm from "./Components/categories/Addcategories";
 import CategoriesList from "./Components/categories/CategoryList";
-import SubcategoryCreationForm from "./Components/subcategories/AddsubCategories";
+//import SubcategoryCreationForm from "./Components/subcategories/AddsubCategories";
 import SubcategoryList from "./Components/subcategories/SubcategoryList";
 import AddProductForm from "./Components/products/Addproduct";
 import ProductList from "./Components/products/ProductList";
@@ -22,8 +22,7 @@ const App = () => {
 
         <Route exact path="/" element={<Dashboard />} />
         <Route exact path="/Categoryform" element={<CategoryForm />} />
-        <Route exact path="/categoryList" element={<CategoriesList />} />
-        <Route exact path="/subCategoryform" element={<SubcategoryCreationForm />} />
+        <Route exact path="/categoryList" element={<CategoriesList />} /> 
         <Route exact path="/subCategoryList" element={<SubcategoryList />} />
         <Route exact path="/addProduct" element={<AddProductForm />} />
         <Route exact path="/productList" element={<ProductList />} />

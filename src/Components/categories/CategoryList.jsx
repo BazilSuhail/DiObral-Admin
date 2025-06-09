@@ -8,8 +8,6 @@ import {
   MdDelete,
   MdAdd,
   MdSearch,
-  MdFilterList,
-  MdSort,
   MdDescription,
   MdClose,
   MdSave,
@@ -17,39 +15,8 @@ import {
 } from "react-icons/md"
 import axios from "axios"
 
-// Mock data for categories
-const mockCategories = [
-  {
-    _id: "cat1",
-    name: "Clothing",
-    description: "All types of clothing items including shirts, pants, dresses, and more",
-  },
-  {
-    _id: "cat2",
-    name: "Shoes",
-    description: "Footwear for all occasions including casual, formal, and sports shoes",
-  },
-  {
-    _id: "cat3",
-    name: "Accessories",
-    description: "Fashion accessories like bags, jewelry, watches, and belts",
-  },
-  {
-    _id: "cat4",
-    name: "Electronics",
-    description: "Electronic devices and gadgets for everyday use",
-  },
-  {
-    _id: "cat5",
-    name: "Home & Garden",
-    description: "Items for home decoration and garden maintenance",
-  },
-]
 
 export default function CategoryManager() {
-
-
-  // ==============
   const [categories, setCategories] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
   const [modalOpen, setModalOpen] = useState(false)
@@ -108,8 +75,7 @@ export default function CategoryManager() {
         )
         setCategories(updatedCategories)
         try {
-          const response = await axios.put(`${process.env.REACT_APP_API_BASE_URL}/category/${selectedCategory._id}`, formData);
-          //onUpdate(response.data.category);
+          await axios.put(`${process.env.REACT_APP_API_BASE_URL}/category/${selectedCategory._id}`, formData);
         }
         catch (error) {
           console.error('Error updating category:', error);
@@ -123,9 +89,8 @@ export default function CategoryManager() {
         }
         setCategories([...categories, newCategory])
         try {
-          const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/category/add-category `, formData);
-          //alert(response.data.message);
-          setFormData({ name: '', description: '' }); // Clear form after submission
+          await axios.post(`${process.env.REACT_APP_API_BASE_URL}/category/add-category `, formData);
+          setFormData({ name: '', description: '' });
         }
         catch (error) {
           alert('Error creating category');
@@ -260,7 +225,7 @@ export default function CategoryManager() {
             />
           </div>
           <div className="flex gap-2">
-                       <motion.button
+            <motion.button
               onClick={handleCreate}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
@@ -272,7 +237,7 @@ export default function CategoryManager() {
           </div>
         </motion.div>
 
-      
+
 
         {/* Mobile Cards */}
         <div className="block lg:hidden space-y-4 mb-6 overflow-x-auto">

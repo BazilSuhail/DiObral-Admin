@@ -13,50 +13,9 @@ import {
 } from "react-icons/md"
 import axios from "axios"
 
-// Mock data for subcategories and categories
-const mockCategories = [
-  { _id: "cat1", name: "Clothing" },
-  { _id: "cat2", name: "Shoes" },
-  { _id: "cat3", name: "Accessories" },
-  { _id: "cat4", name: "Electronics" },
-]
-
-const mockSubcategories = [
-  {
-    _id: "sub1",
-    name: "Outerwear",
-    description: "Jackets, coats, and outdoor clothing",
-    category: "Clothing",
-  },
-  {
-    _id: "sub2",
-    name: "Bottoms",
-    description: "Pants, jeans, shorts, and skirts",
-    category: "Clothing",
-  },
-  {
-    _id: "sub3",
-    name: "Tops",
-    description: "T-shirts, shirts, blouses, and sweaters",
-    category: "Clothing",
-  },
-  {
-    _id: "sub4",
-    name: "Footwear",
-    description: "Casual and formal shoes",
-    category: "Shoes",
-  },
-  {
-    _id: "sub5",
-    name: "Bags",
-    description: "Handbags, backpacks, and wallets",
-    category: "Accessories",
-  },
-]
 
 export default function SubcategoryManager() {
-
-  
+ 
   const [subcategories, setSubcategories] = useState([]);
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("")

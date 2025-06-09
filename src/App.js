@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, } from "react-router-dom";
 
 import Navbar from "./Components/Navbar";
 import Dashboard from "./Components/Dashboard";
-import CategoryForm from "./Components/categories/Addcategories";
+// import CategoryForm from "./Components/categories/Addcategories";
 import CategoriesList from "./Components/categories/CategoryList";
 //import SubcategoryCreationForm from "./Components/subcategories/AddsubCategories";
 import SubcategoryList from "./Components/subcategories/SubcategoryList";
@@ -21,7 +21,7 @@ const App = () => {
       <Routes>
 
         <Route exact path="/" element={<Dashboard />} />
-        <Route exact path="/Categoryform" element={<CategoryForm />} />
+        {/* <Route exact path="/Categoryform" element={<CategoryForm />} /> */}
         <Route exact path="/categoryList" element={<CategoriesList />} /> 
         <Route exact path="/subCategoryList" element={<SubcategoryList />} />
         <Route exact path="/addProduct" element={<AddProductForm />} />

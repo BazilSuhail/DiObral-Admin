@@ -15,8 +15,10 @@ import {
   MdSettings,
   MdLocalShipping,
 } from "react-icons/md"
+import { NavLink, useNavigate } from "react-router-dom"
 
 export default function Navbar() {
+    const navigate = useNavigate()
   const [ecommerceOpen, setEcommerceOpen] = useState(true)
   const [ordersOpen, setOrdersOpen] = useState(true)
   const [activeItem, setActiveItem] = useState("/")
@@ -49,6 +51,7 @@ export default function Navbar() {
 
   const handleNavClick = (href) => {
     setActiveItem(href)
+    navigate(href)
   }
 
   const NavButton = ({ item, isSubItem = false }) => {
@@ -56,7 +59,8 @@ export default function Navbar() {
     const Icon = item.icon
 
     return (
-      <motion.button
+   <NavLink to={item.href}>
+       <motion.button
         onClick={() => handleNavClick(item.href)}
         className={`
           w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left transition-all duration-200
@@ -71,8 +75,9 @@ export default function Navbar() {
         whileTap={{ scale: 0.98 }}
       >
         <Icon className={`${isSubItem ? "w-3 h-3" : "w-4 h-4"} flex-shrink-0`} />
-        <span className="font-medium">{item.name}</span>
+        <span className="font-medium text-[14px]">{item.name}</span>
       </motion.button>
+   </NavLink>
     )
   }
 
@@ -109,7 +114,7 @@ export default function Navbar() {
               transition={{ duration: 0.3, ease: "easeInOut" }}
               className="overflow-hidden"
             >
-              <div className="space-y-1 py-2">
+              <div className="space-y-1 pl-[22px] py-2">
                 {items.map((item) => (
                   <NavButton key={item.href} item={item} isSubItem />
                 ))}
@@ -126,7 +131,7 @@ export default function Navbar() {
       initial={{ x: -280 }}
       animate={{ x: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className="fixed left-0 top-0 h-screen w-[280px] bg-white border-r border-gray-100 shadow-xl z-50 flex flex-col"
+      className="fixed left-0 top-0 h-screen w-[280px] bg-white border-r border-gray-100 shadow-xl z-50 hidden xsx:flex flex-col"
     >
       {/* Header */}
       <div className="p-6 border-b border-gray-100">

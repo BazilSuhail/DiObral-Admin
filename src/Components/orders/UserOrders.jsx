@@ -1,54 +1,9 @@
-"use client"
-
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { MdPerson, MdEmail, MdPhone, MdShoppingBag, MdVisibility, MdSearch, MdFilterList, MdSort } from "react-icons/md"
+import { MdPerson, MdEmail, MdPhone, MdShoppingBag, MdVisibility, MdSearch } from "react-icons/md"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
 
-// Mock data for users
-const mockUsers = [
-  {
-    documentId: "user1",
-    userId: "u-001",
-    fullName: "John Doe",
-    email: "john.doe@example.com",
-    contact: "+1 (555) 123-4567",
-    orderCount: 8,
-  },
-  {
-    documentId: "user2",
-    userId: "u-002",
-    fullName: "Jane Smith",
-    email: "jane.smith@example.com",
-    contact: "+1 (555) 987-6543",
-    orderCount: 12,
-  },
-  {
-    documentId: "user3",
-    userId: "u-003",
-    fullName: "Robert Johnson",
-    email: "robert.j@example.com",
-    contact: "+1 (555) 456-7890",
-    orderCount: 5,
-  },
-  {
-    documentId: "user4",
-    userId: "u-004",
-    fullName: "Emily Williams",
-    email: "emily.w@example.com",
-    contact: "+1 (555) 234-5678",
-    orderCount: 15,
-  },
-  {
-    documentId: "user5",
-    userId: "u-005",
-    fullName: "Michael Brown",
-    email: "michael.b@example.com",
-    contact: "+1 (555) 876-5432",
-    orderCount: 3,
-  },
-]
 
 export default function UsersOrders() {
   //const [users] = useState(mockUsers)
@@ -141,22 +96,7 @@ export default function UsersOrders() {
               className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
             />
           </div>
-          <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            className="flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors duration-200"
-          >
-            <MdFilterList className="text-gray-600" />
-            <span className="text-gray-700 font-medium">Filter</span>
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            className="flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors duration-200"
-          >
-            <MdSort className="text-gray-600" />
-            <span className="text-gray-700 font-medium">Sort</span>
-          </motion.button>
+         
         </motion.div>
 
         {/* Table */}

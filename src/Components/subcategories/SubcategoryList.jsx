@@ -258,7 +258,7 @@ export default function SubcategoryManager() {
 
 
         {/* Summary Stats */}
-        <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <motion.div variants={itemVariants} className="grid grid-cols-2 md:grid-cols-3 gap-6">
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 text-center">
             <div className="text-2xl font-bold text-blue-600 mb-1">{subcategories.length}</div>
             <div className="text-sm text-gray-600">Total Subcategories</div>
@@ -267,7 +267,7 @@ export default function SubcategoryManager() {
             <div className="text-2xl font-bold text-green-600 mb-1">{categories.length}</div>
             <div className="text-sm text-gray-600">Categories</div>
           </div>
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 text-center">
+          <div className="bg-white md:block hidden rounded-xl p-6 shadow-sm border border-gray-200 text-center">
             <div className="text-2xl font-bold text-purple-600 mb-1">
               {(subcategories.length / categories.length).toFixed(1)}
             </div>

@@ -51,7 +51,7 @@ export default function OrderDetails() {
     //   }
 
     return (
-        <main className="ml-4 xsx:ml-[230px] bg-gray-100 min-h-screen py-6">
+        <main className="pl-4 xsx:ml-[230px] bg-gray-100 min-h-screen py-6">
             <motion.div initial="hidden" animate="visible" variants={containerVariants} className="max-w-6xl mx-auto">
                 {/* Header */}
                 <motion.div variants={itemVariants} className="mb-8">

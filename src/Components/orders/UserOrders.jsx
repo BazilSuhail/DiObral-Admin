@@ -62,7 +62,7 @@ export default function UsersOrders() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="ml-[10px] min-h-screen bg-gray-50 xsx:ml-[280px] xsx:px-[20px] pb-[35px] pr-[12px] flex flex-col"
+      className="ml-[10px] min-h-screen bg-gray-50 xsx:ml-[270px] xsx:px-[20px] pb-[35px] pr-[12px] flex flex-col"
     >
       <div className="my-[20px] flex flex-col w-full pb-[35px] px-[15px] justify-center rounded-xl">
         {/* Header */}
@@ -96,8 +96,12 @@ export default function UsersOrders() {
               className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
             />
           </div>
-         
         </motion.div>
+
+
+         <div className="text-sm mb-5 font-[600] text-gray-500">
+            Showing {filteredUsers.length} of {users.length} users
+          </div>
 
         {/* Table */}
         <motion.div
@@ -106,7 +110,7 @@ export default function UsersOrders() {
           transition={{ duration: 0.3, delay: 0.2 }}
           className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
         >
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none]">
             <table className="w-full">
               {/* Table Header */}
               <thead>
@@ -148,11 +152,11 @@ export default function UsersOrders() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3 + index * 0.05 }}
-                      className="border-b border-gray-100 hover:bg-red-50 transition-colors duration-150"
+                      className="border-b  border-gray-100 hover:bg-red-50 transition-colors duration-150"
                     >
                       <td className="px-6 py-4">
                         <div className="font-medium text-gray-900">{user.fullName}</div>
-                        <div className="text-xs text-gray-500">ID: {user.userId}</div>
+                        <div className="text-xs whitespace-nowrap  text-gray-500">ID: {user.userId}</div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-blue-600 hover:underline">{user.email}</div>
@@ -185,34 +189,6 @@ export default function UsersOrders() {
                 )}
               </tbody>
             </table>
-          </div>
-        </motion.div>
-
-        {/* Pagination */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="flex justify-between items-center mt-6"
-        >
-          <div className="text-sm text-gray-600">
-            Showing {filteredUsers.length} of {users.length} users
-          </div>
-          <div className="flex gap-2">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-4 py-2 border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50"
-            >
-              Previous
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
-            >
-              Next
-            </motion.button>
           </div>
         </motion.div>
       </div>

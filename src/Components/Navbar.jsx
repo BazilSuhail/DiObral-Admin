@@ -1,207 +1,347 @@
-"use client"
 
 import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import {
-  MdDashboard,
-  MdCategory,
-  MdTrendingUp,
-  MdInventory,
-  MdShoppingCart,
-  MdSearch,
-  MdKeyboardArrowDown,
-  MdAdd,
-  MdList,
-  MdSettings,
-  MdLocalShipping,
+    MdInventory,
+    MdShoppingCart,
+    MdKeyboardArrowDown,
+    MdAdd,
+    MdList,
+    MdSettings,
+    MdLocalShipping,
+    MdProductionQuantityLimits
 } from "react-icons/md"
 import { NavLink, useNavigate } from "react-router-dom"
+import { RxDashboard } from "react-icons/rx"
+import { FaCubes } from "react-icons/fa"
+import { LuCopyMinus } from "react-icons/lu"
+import { IoClose, IoMenu } from "react-icons/io5"
 
 export default function Navbar() {
     const navigate = useNavigate()
-  const [ecommerceOpen, setEcommerceOpen] = useState(true)
-  const [ordersOpen, setOrdersOpen] = useState(true)
-  const [activeItem, setActiveItem] = useState("/")
+    const [ecommerceOpen, setEcommerceOpen] = useState(true)
+    const [ordersOpen, setOrdersOpen] = useState(true)
+    const [activeItem, setActiveItem] = useState("/")
 
-  // Use refs to track previous state to prevent unnecessary animations
-  const prevEcommerceOpen = useRef(ecommerceOpen)
-  const prevOrdersOpen = useRef(ordersOpen)
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const handleMenuToggle = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
 
-  // Update refs when state changes
-  useEffect(() => {
-    prevEcommerceOpen.current = ecommerceOpen
-    prevOrdersOpen.current = ordersOpen
-  }, [ecommerceOpen, ordersOpen])
+    const prevEcommerceOpen = useRef(ecommerceOpen)
+    const prevOrdersOpen = useRef(ordersOpen)
 
-  const mainNavItems = [
-    { name: "Dashboard", href: "/", icon: MdDashboard },
-    { name: "Categories", href: "/categoryList", icon: MdCategory },
-    { name: "Sub-Categories", href: "/subCategoryList", icon: MdTrendingUp },
-  ]
+    // Update refs when state changes
+    useEffect(() => {
+        prevEcommerceOpen.current = ecommerceOpen
+        prevOrdersOpen.current = ordersOpen
+    }, [ecommerceOpen, ordersOpen])
 
-  const ecommerceItems = [
-    { name: "Add Products", href: "/addProduct", icon: MdAdd },
-    { name: "Product List", href: "/productList", icon: MdList },
-  ]
+    const mainNavItems = [
+        { name: "Dashboard", href: "/", icon: RxDashboard },
+        { name: "Categories", href: "/categoryList", icon: FaCubes },
+        { name: "Sub-Categories", href: "/subCategoryList", icon: LuCopyMinus },
+    ]
 
-  const orderItems = [
-    { name: "Manage Orders", href: "/admin-orders-list", icon: MdSettings },
-    { name: "Track Orders", href: "/order-tracking", icon: MdLocalShipping },
-  ]
+    const ecommerceItems = [
+        { name: "Add Products", href: "/addProduct", icon: MdAdd },
+        { name: "Product List", href: "/productList", icon: MdList },
+    ]
 
-  const handleNavClick = (href) => {
-    setActiveItem(href)
-    navigate(href)
-  }
+    const orderItems = [
+        { name: "Manage Orders", href: "/admin-orders-list", icon: MdSettings },
+        { name: "Track Orders", href: "/order-tracking", icon: MdLocalShipping },
+    ]
 
-  const NavButton = ({ item, isSubItem = false }) => {
-    const isActive = activeItem === item.href
-    const Icon = item.icon
+    const handleNavClick = (href) => {
+        setActiveItem(href)
+        navigate(href)
+    }
 
-    return (
-   <NavLink to={item.href}>
-       <motion.button
-        onClick={() => handleNavClick(item.href)}
-        className={`
-          w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left transition-all duration-200
+    const NavButton = ({ item, isSubItem = false }) => {
+        const isActive = activeItem === item.href
+        const Icon = item.icon
+
+        return (
+            <NavLink to={item.href}>
+                <motion.button
+                    onClick={() => handleNavClick(item.href)}
+                    className={`
+          w-full flex items-center gap-2 px-3 py-2 my-2 rounded-lg text-left transition-all duration-200
           ${isSubItem ? "text-xs" : "text-sm"}
-          ${
-            isActive
-              ? "bg-red-50 text-red-700 border-l-4 border-red-600 shadow-sm"
-              : "text-gray-700 hover:bg-gray-50 hover:text-red-600"
-          }
+          ${isActive
+                            ? "bg-red-50 text-red-700 border-[2px] border-red-100 shadow-sm"
+                            : "text-gray-700 hover:bg-gray-50 hover:text-red-600"
+                        }
         `}
-        whileHover={{ x: isActive ? 0 : 4 }}
-        whileTap={{ scale: 0.98 }}
-      >
-        <Icon className={`${isSubItem ? "w-3 h-3" : "w-4 h-4"} flex-shrink-0`} />
-        <span className="font-medium text-[14px]">{item.name}</span>
-      </motion.button>
-   </NavLink>
-    )
-  }
+                    whileHover={{ x: isActive ? 0 : 4 }}
+                    whileTap={{ scale: 0.98 }}
+                >
+                    <Icon className={`${isSubItem ? "text-[17px]" : "text-[23px]"} flex-shrink-0`} />
+                    <span className="font-medium ml-1 text-[15px]">{item.name}</span>
+                </motion.button>
+            </NavLink>
+        )
+    }
 
-  const CollapsibleSection = ({ title, icon: Icon, items, isOpen, prevIsOpen, onToggle }) => {
-    // Create a stable key that only changes when isOpen changes
-    // This prevents AnimatePresence from re-rendering when other state changes
-    const animationKey = `${title}-${isOpen}`
+    const CollapsibleSection = ({ title, icon: Icon, items, isOpen, onToggle }) => {
+        const animationKey = `${title}-${isOpen}`
+
+        return (
+            <div className="space-y-1">
+                <motion.button
+                    onClick={onToggle}
+                    className="w-full flex items-center justify-between px-3 py-2 text-gray-700 hover:bg-gray-50 hover:text-red-600 rounded-lg transition-all duration-200"
+                    whileHover={{ x: 2 }}
+                    whileTap={{ scale: 0.98 }}
+                >
+                    <div className="flex items-center gap-2">
+                        <Icon className="text-[22px]" />
+                        <span className="font-medium text-[15px]">{title}</span>
+                    </div>
+                    <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
+                        <MdKeyboardArrowDown className="text-[20px]" />
+                    </motion.div>
+                </motion.button>
+
+                {/* Using a stable key to prevent unnecessary animations */}
+                <AnimatePresence initial={false}>
+                    {isOpen && (
+                        <motion.div
+                            key={animationKey}
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 1, ease: "easeInOut" }}
+                            className="overflow-hidden"
+                        >
+                            <div className="space-y-1 pl-[22px] py-2">
+                                {items.map((item) => (
+                                    <NavButton key={item.href} item={item} isSubItem />
+                                ))}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
+        )
+    }
 
     return (
-      <div className="space-y-1">
-        <motion.button
-          onClick={onToggle}
-          className="w-full flex items-center justify-between px-3 py-2 text-gray-700 hover:bg-gray-50 hover:text-red-600 rounded-lg transition-all duration-200"
-          whileHover={{ x: 2 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <div className="flex items-center gap-2">
-            <Icon className="w-4 h-4" />
-            <span className="font-medium text-sm">{title}</span>
-          </div>
-          <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
-            <MdKeyboardArrowDown className="w-3 h-3" />
-          </motion.div>
-        </motion.button>
-
-        {/* We use a stable key to prevent unnecessary animations */}
-        <AnimatePresence initial={false}>
-          {isOpen && (
+        <nav>
             <motion.div
-              key={animationKey}
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="overflow-hidden"
+                initial={{ x: -280 }}
+                animate={{ x: 0 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="fixed left-0 top-0 h-screen w-[280px] bg-white border-r border-gray-100 shadow-xl z-50 hidden xsx:flex flex-col"
             >
-              <div className="space-y-1 pl-[22px] py-2">
-                {items.map((item) => (
-                  <NavButton key={item.href} item={item} isSubItem />
-                ))}
-              </div>
+                {/* Header */}
+                <div className="px-6 pt-6 border-b border-gray-100">
+                    <div className="flex items-center gap-3 mb-6">
+                        <img src="/logo192.png" alt="" className="w-[45px] " />
+                        <div>
+                            <h1 className="text-xl font-bold text-red-600">TexLeath</h1>
+                            <p className="text-xs text-red-900 font-medium">Industries</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div className="mx-6 bg-gray-200 rounded-lg h-[3px]"></div>
+
+                {/* Navigation */}
+                <div className="flex-1 overflow-y-auto px-4 space-y-2">
+                    {/* Main Navigation */}
+                    <div className="space-y-1">
+                        {mainNavItems.map((item) => (
+                            <NavButton key={item.href} item={item} />
+                        ))}
+                    </div>
+
+                    {/* Divider */}
+                    <div className="my-6 border-t border-gray-200"></div>
+
+                    {/* E-Commerce Section */}
+                    <CollapsibleSection
+                        title="E Commerce"
+                        icon={MdInventory}
+                        items={ecommerceItems}
+                        isOpen={ecommerceOpen}
+                        prevIsOpen={prevEcommerceOpen.current}
+                        onToggle={() => setEcommerceOpen(!ecommerceOpen)}
+                    />
+
+                    {/* Orders Section */}
+                    <CollapsibleSection
+                        title="Orders"
+                        icon={MdShoppingCart}
+                        items={orderItems}
+                        isOpen={ordersOpen}
+                        prevIsOpen={prevOrdersOpen.current}
+                        onToggle={() => setOrdersOpen(!ordersOpen)}
+                    />
+                </div>
+
+                {/* Footer */}
+                <div className="p-4 border-t border-gray-100">
+                    <motion.button
+                        className="w-full flex items-center gap-2 px-3 py-2 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-lg transition-all duration-200"
+                        whileHover={{ x: 2 }}
+                        whileTap={{ scale: 0.98 }}
+                    >
+                        <MdSettings className="w-4 h-4" />
+                        <span className="font-medium">Admin Settings</span>
+                    </motion.button>
+                </div>
+
+                <div className="relative text-white xsx:hidden">
+                    <div className="flex items-center h-[70px] justify-between bg-gradient-to-r from-red-950 to-red-900 px-4 py-3 z-50 relative">
+                        <div className="flex items-center">
+                            <motion.div
+                                initial={{ opacity: 1 }}
+                                animate={{ opacity: isMenuOpen ? 0 : 1 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                <img src="/logo192.png" alt="TL" className="md:w-[45px] w-[33px] h-[33px] md:h-[45px]" />
+                            </motion.div>
+                            <motion.div
+                                className="text-[28px] font-bold"
+                                initial={{ x: 40 }}
+                                animate={{ x: isMenuOpen ? -40 : 0 }}
+                                transition={{ duration: 0.5 }}
+                            >
+                                <div className="flex">
+                                    <div className="text-red-700 ml-[4px] md:text-[25px] text-[19px] font-bold">TEXLEATH</div>
+                                    <div className="text-red-100 ml-[5px] md:text-[25px] text-[18px] font-bold">INDUSTRIES</div>
+                                </div>
+                            </motion.div>
+                        </div>
+                        <motion.div
+                            key={isMenuOpen ? 'close' : 'menu'}
+                            initial={{ opacity: 0, rotate: isMenuOpen ? 180 : -180 }}
+                            animate={{ opacity: 1, rotate: 0 }}
+                            exit={{ opacity: 0, rotate: isMenuOpen ? -180 : 180 }}
+                            transition={{ duration: 0.3 }}
+                            className="cursor-pointer text-gray-300"
+                            onClick={handleMenuToggle}
+                        >
+
+                            {isMenuOpen ? (
+                                <IoClose size={35} />
+                            ) : (
+                                <IoMenu size={35} />
+                            )}
+                        </motion.div>
+                    </div>
+                </div>
             </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+
+            <header className="w-full overflow-hidden">
+               <div className="text-white xsx:hidden">
+                    <div className="flex items-center h-[70px] border-b-[2px] border-gray-100 shadow-md justify-between bg-gradient-to-r from-white to-gray-50 px-4 py-3 z-[999]">
+                        <div className="flex items-center">
+                            <motion.div
+                                initial={{ opacity: 1 }}
+                                animate={{ opacity: isMenuOpen ? 0 : 1 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                <img src="/logo192.png" alt="TL" className="md:w-[48px] h-[48px] w-[48px]  rounded-full border-[2px] border-gray-100 md:h-[45px]" />
+                            </motion.div>
+                            <motion.div
+                                className="text-[28px] font-bold"
+                                initial={{ x: 40 }}
+                                animate={{ x: isMenuOpen ? -40 : 0 }}
+                                transition={{ duration: 0.5 }}
+                            >
+                                 <div className="ml-[8px]">
+                            <h1 className="text-[20px] font-bold text-red-600">TexLeath <span className="text-red-800">Industries</span></h1>
+                        </div>
+                            </motion.div>
+                        </div>
+                        <motion.div
+                            key={isMenuOpen ? 'close' : 'menu'}
+                            initial={{ opacity: 0, rotate: isMenuOpen ? 180 : -180 }}
+                            animate={{ opacity: 1, rotate: 0 }}
+                            exit={{ opacity: 0, rotate: isMenuOpen ? -180 : 180 }}
+                            transition={{ duration: 0.3 }}
+                            className="cursor-pointer text-gray-400"
+                            onClick={handleMenuToggle}
+                        >
+
+                            {isMenuOpen ? (
+                                <IoClose size={35} />
+                            ) : (
+                                <IoMenu size={35} />
+                            )}
+                        </motion.div>
+                    </div>
+                <AnimatePresence>
+                    {isMenuOpen && (
+                        <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: "100vw", transition: { duration: 0.5 } }}
+                            exit={{ width: 0, transition: { duration: 0.3, delay: 0.1 } }}
+                            className="bg-gradient-to-r from-white to-gray-50 flex flex-col h-screen px-4 "
+
+                        >
+                            <motion.div
+                            onClick={handleMenuToggle}
+                                initial={{ x: -100, opacity: 0 }}
+                                animate={{ x: 0, opacity: 1, transition: { duration: 0.5, delay: 0.3 } }}
+                                exit={{ x: -100, opacity: 0, transition: { duration: 0.2 } }}
+                                className="flex flex-col mt-[25px]"
+                            >
+                                <NavLink to="/" className={({ isActive }) => `flex mb-[7px] items-center py-[3px] px-2 rounded-md  ${isActive ? "bg-red-50 text-red-700 border-[2px] border-red-100 shadow-sm" : "text-gray-700 hover:bg-gray-50 hover:text-red-600" }`} >
+                                    <RxDashboard className="text-[20px] mb-[3px] mr-[12px]" /><p className="mb-[2px] font-[500] text-[17px]">Dashboard</p>
+                                </NavLink>
+                                <NavLink to="/categoryList" className={({ isActive }) => `flex mb-[7px] items-center py-[3px] px-2 rounded-md ${isActive ? "bg-red-50 text-red-700 border-[2px] border-red-100 shadow-sm" : "text-gray-700 hover:bg-gray-50 hover:text-red-600" }`} >
+                                    <FaCubes className="text-[20px] mb-[2px] mr-[12px]" /><p className="mb-[2px] font-[500] text-[17px]">Categories</p>
+                                </NavLink>
+                                <NavLink to="/subCategoryList" className={({ isActive }) => `flex font-[500] items-center py-[3px] px-2 rounded-md ${isActive ? "bg-red-50 text-red-700 border-[2px] border-red-100 shadow-sm" : "text-gray-700 hover:bg-gray-50 hover:text-red-600" }`} >
+                                    <LuCopyMinus className="text-[20px] mb-[3px] mr-[12px]" /><p className="mb-[2px] font-[500] text-[17px]">Sub-Categories</p>
+                                </NavLink>
+
+                                <div className="w-[95%] rounded-lg h-[1px] bg-red-200 mx-auto mt-[15px] mb-[5px]"></div>
+
+                                <div className="my-[5px]">
+                                    <h3 className="ml-[6px] text-lg flex items-center text-red-800 font-[600] justify-between cursor-pointer" >
+                                        Ecommerce
+                                    </h3>
+                                    <div className="overflow-hidden mt-[10px]">
+                                        <NavLink to="/productList" className={({ isActive }) => `flex mb-[7px]  items-center py-[3px] px-2 rounded-md ${isActive ? "bg-red-50 text-red-700 border-[2px] border-red-100 shadow-sm" : "text-gray-700 hover:bg-gray-50 hover:text-red-600" }`} >
+                                            <MdList className="text-[20px] mb-[2px] mr-[12px]" /><p className="mb-[2px] font-[500] text-[17px]">Products List</p>
+                                        </NavLink>
+                                        <NavLink to="/addProduct" className={({ isActive }) => `flex mt-[8px] items-center py-[3px] px-2 rounded-md ${isActive ? "bg-red-50 text-red-700 border-[2px] border-red-100 shadow-sm" : "text-gray-700 hover:bg-gray-50 hover:text-red-600" }`} >
+                                            <MdProductionQuantityLimits className="text-[20px] mb-[3px] mr-[12px]" /><p className="mb-[2px] font-[500] text-[17px]">Add Products    </p>
+                                        </NavLink>
+                                    </div>
+                                </div>
+
+                                <div className="w-full rounded-lg h-[2px] bg-red-200 mt-[15px] mb-[5px]"></div>
+
+                                <div className="my-[5px]">
+                                    <h3 className="ml-[6px] text-red-800 font-[600] text-lg flex items-center justify-between cursor-pointer" >
+                                        Orders
+                                    </h3>
+
+                                    <div className="overflow-hidden mt-[10px]">
+                                        <NavLink to="/admin-orders-list" className={({ isActive }) => `flex mb-[7px] mt-[8px] items-center py-[3px] px-2 rounded-md  ${isActive ? "bg-red-50 text-red-700 border-[2px] border-red-100 shadow-sm" : "text-gray-700 hover:bg-gray-50 hover:text-red-600" }`} >
+                                            <MdList className="text-[20px] mb-[2px] mr-[12px]" /><p className="mb-[2px] font-[500] text-[17px]">Manage Orders</p>
+                                        </NavLink>
+                                        <NavLink to="/order-tracking" className={({ isActive }) => `flex items-center py-[3px] px-2 rounded-md  ${isActive ? "bg-red-50 text-red-700 border-[2px] border-red-100 shadow-sm" : "text-gray-700 hover:bg-gray-50 hover:text-red-600" }`} >
+                                            <MdProductionQuantityLimits className="text-[20px] mb-[3px] mr-[12px]" /><p className="mb-[2px] font-[500] text-[17px]">Track Order    </p>
+                                        </NavLink>
+
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+                </div>
+            </header>
+        </nav>
     )
-  }
-
-  return (
-    <motion.div
-      initial={{ x: -280 }}
-      animate={{ x: 0 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className="fixed left-0 top-0 h-screen w-[280px] bg-white border-r border-gray-100 shadow-xl z-50 hidden xsx:flex flex-col"
-    >
-      {/* Header */}
-      <div className="p-6 border-b border-gray-100">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
-            <MdInventory className="w-5 h-5 text-white" />
-          </div>
-          <div>
-            <h1 className="text-lg font-bold text-red-600">TexLeath</h1>
-            <p className="text-xs text-red-900 font-medium">Industries</p>
-          </div>
-        </div>
-
-        {/* Search Bar */}
-        <div className="relative">
-          <MdSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 w-3 h-3 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search..."
-            className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200"
-          />
-        </div>
-      </div>
-
-      {/* Navigation */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-2">
-        {/* Main Navigation */}
-        <div className="space-y-1">
-          {mainNavItems.map((item) => (
-            <NavButton key={item.href} item={item} />
-          ))}
-        </div>
-
-        {/* Divider */}
-        <div className="my-6 border-t border-gray-200"></div>
-
-        {/* E-Commerce Section */}
-        <CollapsibleSection
-          title="E Commerce"
-          icon={MdInventory}
-          items={ecommerceItems}
-          isOpen={ecommerceOpen}
-          prevIsOpen={prevEcommerceOpen.current}
-          onToggle={() => setEcommerceOpen(!ecommerceOpen)}
-        />
-
-        {/* Orders Section */}
-        <CollapsibleSection
-          title="Orders"
-          icon={MdShoppingCart}
-          items={orderItems}
-          isOpen={ordersOpen}
-          prevIsOpen={prevOrdersOpen.current}
-          onToggle={() => setOrdersOpen(!ordersOpen)}
-        />
-      </div>
-
-      {/* Footer */}
-      <div className="p-4 border-t border-gray-100">
-        <motion.button
-          className="w-full flex items-center gap-2 px-3 py-2 text-gray-600 hover:bg-red-50 hover:text-red-600 rounded-lg transition-all duration-200"
-          whileHover={{ x: 2 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <MdSettings className="w-4 h-4" />
-          <span className="font-medium">Admin Settings</span>
-        </motion.button>
-      </div>
-    </motion.div>
-  )
 }
 
 // import { useState } from 'react';

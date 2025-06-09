@@ -109,7 +109,7 @@ export default function ProductsTable() {
                 </motion.div>
 
                 {/* Summary Stats */}
-                <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <motion.div variants={itemVariants} className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                     <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 text-center">
                         <div className="text-2xl font-bold text-blue-600 mb-1">{products.length}</div>
                         <div className="text-sm text-gray-600">Total Products</div>
@@ -162,7 +162,7 @@ export default function ProductsTable() {
                                     <h3 className="font-semibold text-gray-900 text-lg">{product.name}</h3>
                                     <p className="text-sm text-gray-500">ID: {product._id}</p>
                                 </div>
-                                <div className={`px-3 py-1 rounded-full text-xs font-medium ${getStockStatus(product.stock).color}`}>
+                                <div className={`px-3 py-1 rounded-full whitespace-nowrap  text-xs font-medium ${getStockStatus(product.stock).color}`}>
                                     {getStockStatus(product.stock).label}
                                 </div>
                             </div>
@@ -178,9 +178,9 @@ export default function ProductsTable() {
                                 </div>
                             </div>
 
-                            <div className="mb-4">
+                            <div className="mb-4 flex items-center">
                                 <p className="text-sm text-gray-500">Category</p>
-                                <span className="inline-block bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-medium">
+                                <span className="inline-block ml-[8px] whitespace-nowrap  bg-red-100 text-red-700 px-3 pt-[1px] mt-[3px] pb-[3px] rounded-full text-[11px] font-medium">
                                     {product.subcategory}
                                 </span>
                             </div>
@@ -260,7 +260,7 @@ export default function ProductsTable() {
                                         >
                                             <td className="px-6 py-4">
                                                 <div>
-                                                    <div className="font-medium text-gray-900">{product.name}</div>
+                                                    <div className="font-medium whitespace-nowrap  text-gray-900">{product.name}</div>
                                                     <div className="text-xs text-gray-500">ID: {product._id}</div>
                                                 </div>
                                             </td>
@@ -268,14 +268,14 @@ export default function ProductsTable() {
                                                 <div className="flex items-center gap-2">
                                                     <span className="font-semibold text-gray-900">{product.stock}</span>
                                                     <span
-                                                        className={`px-2 py-1 rounded-full text-xs font-medium ${getStockStatus(product.stock).color}`}
+                                                        className={`px-2 py-1 rounded-full text-xs whitespace-nowrap  font-medium ${getStockStatus(product.stock).color}`}
                                                     >
                                                         {getStockStatus(product.stock).label}
                                                     </span>
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
-                                                <span className="inline-block bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-medium">
+                                                <span className="inline-block bg-red-100 whitespace-nowrap  text-red-700 px-3 py-1 rounded-full text-sm font-medium">
                                                     {product.subcategory}
                                                 </span>
                                             </td>
@@ -315,8 +315,6 @@ export default function ProductsTable() {
                         </table>
                     </div>
                 </motion.div>
-
-
             </div>
 
             {/* Product Edit Modal */}

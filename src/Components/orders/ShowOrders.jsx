@@ -7,50 +7,50 @@ import {
   MdAttachMoney,
   MdInventory,
   MdVisibility,
-  MdArrowBack, 
+  MdArrowBack,
 } from "react-icons/md"
 import { useNavigate, useParams } from "react-router-dom"
 import axios from "axios"
 
 export default function ShowOrders() {
-    const { documentId } = useParams();
-    const { userId } = useParams();
-    const [order, setOrder] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const navigate = useNavigate();
+  const { documentId } = useParams();
+  const { userId } = useParams();
+  const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchOrder = async () => {
-            try {
-                const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/completeorder/orders/${documentId}`);
-                setOrder(response.data);
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchOrder();
-    }, [documentId]);
-
-    if (loading) {
-        return <p className="text-red-300 font-semibold">Loading...</p>;
-    }
-
-    if (error) {
-        return <p className="text-red-300 font-semibold">Error: {error}</p>;
-    }
-
-    const handleViewDetails = (orderItem) => {
-        navigate(`/${userId}/order-details`, { state: { orderItem } });
+  useEffect(() => {
+    const fetchOrder = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/completeorder/orders/${documentId}`);
+        setOrder(response.data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
     };
- 
+
+    fetchOrder();
+  }, [documentId]);
+
+  if (loading) {
+    return <p className="text-red-300 font-semibold">Loading...</p>;
+  }
+
+  if (error) {
+    return <p className="text-red-300 font-semibold">Error: {error}</p>;
+  }
+
+  const handleViewDetails = (orderItem) => {
+    navigate(`/${userId}/order-details`, { state: { orderItem } });
+  };
+
 
   const handleGoBack = () => {
-      navigate(-1);
-   
+    navigate(-1);
+
   }
 
   const containerVariants = {
@@ -73,7 +73,7 @@ export default function ShowOrders() {
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="ml-[10px] bg-gray-100 xsx:ml-[280px] xsx:px-[20px] min-h-screen pb-[35px] pr-[12px] flex flex-col"
+      className="pl-[10px] bg-gray-100 xsx:ml-[280px] xsx:px-[20px] min-h-screen pb-[35px] pr-[12px] flex flex-col"
     >
       {/* Header */}
       <motion.div variants={cardVariants} className="my-[20px]">
@@ -95,10 +95,10 @@ export default function ShowOrders() {
           </div>
         </div>
 
-      
+
       </motion.div>
 
-{/* Summary Stats */}
+      {/* Summary Stats */}
       {order && (
         <motion.div variants={cardVariants} className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 text-center">
@@ -144,29 +144,29 @@ export default function ShowOrders() {
                     <p className="text-sm text-gray-500">{orderItem._id}</p>
                   </div>
                 </div>
-                
+
               </div>
 
               {/* Order Info Row */}
-<div className="grid grid-cols-3 gap-4 mb-6">
-  {/* Items */}
-  <div className="col-span-1 bg-gray-100 rounded-lg py-2 px-4">
-    <div className="flex items-center gap-2 mb-2">
-      <MdInventory className="w-4 h-4 text-gray-500" />
-      <span className="text-sm text-gray-600">Items:</span>
-    <span className="text-md font-bold text-gray-900">{orderItem.items.length}</span>
-    </div>
-  </div>
+              <div className="grid grid-cols-3 gap-4 mb-6">
+                {/* Items */}
+                <div className="col-span-1 bg-gray-100 rounded-lg py-2 px-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <MdInventory className="w-4 h-4 text-gray-500" />
+                    <span className="text-sm text-gray-600">Items:</span>
+                    <span className="text-md font-bold text-gray-900">{orderItem.items.length}</span>
+                  </div>
+                </div>
 
-  {/* Total */}
-  <div className="col-span-2 bg-gray-100 rounded-lg py-2 px-4">
-    <div className="flex items-center gap-2 mb-2">
-      <MdAttachMoney className="w-4 h-4 text-gray-500" />
-      <span className="text-sm text-gray-600">Total:</span>
-    <span className="text-md font-bold ml-auto text-green-600">${orderItem.total.toFixed(2)}</span>
-    </div>
-  </div>
-</div>
+                {/* Total */}
+                <div className="col-span-2 bg-gray-100 rounded-lg py-2 px-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <MdAttachMoney className="w-4 h-4 text-gray-500" />
+                    <span className="text-sm text-gray-600">Total:</span>
+                    <span className="text-md font-bold ml-auto text-green-600">${orderItem.total.toFixed(2)}</span>
+                  </div>
+                </div>
+              </div>
 
 
               {/* Order Date */}
@@ -206,14 +206,14 @@ export default function ShowOrders() {
                         +{orderItem.items.length - 1} more items
                       </span>
                     </div>
-                  ):
-                   (
-                    <div className="text-center py-2">
-                      <span className="text-xs text-green-500 bg-green-100 px-3 py-1 rounded-full">
-                        No more items
-                      </span>
-                    </div>
-                  )}
+                  ) :
+                    (
+                      <div className="text-center py-2">
+                        <span className="text-xs text-green-500 bg-green-100 px-3 py-1 rounded-full">
+                          No more items
+                        </span>
+                      </div>
+                    )}
                 </div>
               </div>
 
@@ -257,7 +257,7 @@ export default function ShowOrders() {
         </motion.div>
       )}
 
-          </motion.div>
+    </motion.div>
   )
 }
 

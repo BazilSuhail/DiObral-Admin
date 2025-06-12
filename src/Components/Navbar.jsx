@@ -140,7 +140,7 @@ export default function Navbar() {
                     <div className="flex items-center gap-3 mb-6">
                         <img src="/logo192.png" alt="" className="w-[45px] " />
                         <div>
-                            <h1 className="text-xl font-bold text-red-600">TexLeath</h1>
+                            <h1 className="text-xl font-bold text-red-600">DiObral</h1>
                             <p className="text-xs text-red-900 font-medium">Industries</p>
                         </div>
                     </div>
@@ -254,7 +254,7 @@ export default function Navbar() {
                                 transition={{ duration: 0.5 }}
                             >
                                  <div className="ml-[8px]">
-                            <h1 className="text-[20px] font-bold text-red-600">TexLeath <span className="text-red-800">Industries</span></h1>
+                            <h1 className="text-[20px] font-bold text-red-600">DiObral <span className="text-red-800">Industries</span></h1>
                         </div>
                             </motion.div>
                         </div>
@@ -380,7 +380,7 @@ export default function Navbar() {
 //                 <div className="flex text-red-50 flex-col w-[95%]">
 //                     <div className="flex items-center py-[12px] mt-[8px] shadow-profile-navbar rounded-lg">
 //                         <img src={texleathlogo} alt="Profile" className="w-[40px] h-[40px] border-[2px] border-red-900 rounded-full" />
-//                         <div className="text-[18px] ml-[10px] font-[700] text-[#f62e2e]">TexLeath <span className='text-red-900'>Industries</span></div>
+//                         <div className="text-[18px] ml-[10px] font-[700] text-[#f62e2e]">DiObral <span className='text-red-900'>Industries</span></div>
 //                     </div>
 
 //                     <div className="flex items-center px-[8px] py-[5px] mt-[15px] border-[2px] border-[#8c8c8c] rounded-lg">
@@ -535,7 +535,7 @@ export default function Navbar() {
 //                             >
 //                                 <div className="flex items-center py-[12px] mt-[8px] shadow-profile-navbar rounded-lg">
 //                                     <img src={texleathlogo} alt="Profile" className="w-[40px] h-[40px] border-[2px] border-red-900 rounded-full" />
-//                                     <div className="text-[18px] ml-[10px] font-[700] text-[#f62e2e]">TexLeath <span className='text-red-900'>Industries</span></div>
+//                                     <div className="text-[18px] ml-[10px] font-[700] text-[#f62e2e]">DiObral <span className='text-red-900'>Industries</span></div>
 //                                 </div>
 
 //                                 <div className="flex items-center px-[8px] py-[5px] mt-[15px] border-[2px] border-[#8c8c8c] rounded-lg">

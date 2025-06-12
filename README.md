@@ -1,6 +1,6 @@
-# DiObral (E-Commerce Admin Dashboard)
+### DiObral (E-Commerce Admin Dashboard)
 
-#### `DiObral` Admin Dashboard is the backend management system for your premier clothing e-commerce platform. It provides a sleek and intuitive interface for managing products, orders, users, and reviews, designed to enhance operational efficiency with advanced features and interactive elements.
+`DiObral` Admin Dashboard is the e-commerce clothing/ online market place management system for a premier clothing e-commerce platform. It provides a sleek and intuitive interface for managing products, orders, users, and reviews, designed to enhance operational efficiency with advanced features and interactive elements.
 
 
 
@@ -38,15 +38,15 @@ The dashboard is built using the MERN stack—MongoDB for flexible data storage,
 ---
 
 
-# Run Locally
+## Run Locally
 
  Clone the project using following command
 ```bash
-  git clone https://github.com/BazilSuhail/DiObral-Admin.git
+  git clone https://github.com/BazilSuhail/DiObral-Admin-Dashboard.git
 ```
 Go to the project directory
 ```bash
-cd DiObral-Admin
+cd DiObral-Admin-Dashboard
 ```
 Then **Run** this command in your terminal to install all required dependancies:
 ```bash
@@ -63,24 +63,32 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 ## Features
 
-### Dashboard Overview
+#### Dashboard Overview
 - **Admin Interface**: Sleek and user-friendly design for efficient management of the e-commerce platform.
+- **Dashboard Statistics**: Displays product inventory metrics (total products, stock levels, categories), financial data (total stock value, revenue, average/highest prices), and business performance indicators.
+
 - **Analytics**: Overview of key metrics including sales, user activity, and order statistics.
 
-### Product Management
+#### Category Management
+- **Add Category**: Create new product categories with name, description, and thumbnail image
+- **Edit Category**: Modify category details including SEO metadata and display order
+- **Delete Category**: Remove categories with confirmation and optional product reassignment
+- **Search Filtering**: View and modify subcategories by searching 
+- **Category Hierarchy**: Automatic interface for organizing parent/child relationships of sub-category while creating a product 
+
+#### Subcategory Management
+- **Add Subcategory**: Create nested subcategories with parent category association
+- **Edit Subcategory**: Update subcategory attributes and visibility settings
+- **Delete Subcategory**: Remove subcategories with cascade or orphan product handling
+- **Search Filtering**: View and modify subcategories by searching 
+
+#### Product Management
 - **Add Products**: Add new products with comprehensive details including images, descriptions, and pricing.
 - **Update Products**: Edit existing product information, update stock levels, and manage product attributes.
 - **Delete Products**: Remove products from the catalog as needed.
 
-### Order Management
+#### Order Management
 - **View Orders**: Detailed view of orders, including items, quantities, total amounts, and order status.
 - **Update Order Status**: Manage and update the status of orders to reflect their current state.
 
-### User Management
-- **View Users**: Access and view user profiles, including order history and account details.
-- **Update User Information**: Edit user profiles, including full name, email, and phone number.
-
-### Review Management
-- **View Reviews**: Display and manage reviews submitted by users for products.
-- **Moderate Reviews**: Approve or remove reviews based on content and compliance.
  

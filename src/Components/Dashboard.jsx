@@ -165,10 +165,7 @@ const Dashboard = () => {
 
     fetchData();
   }, []);
-
-  if (loading) {
-    return <LoadingSpinner />
-  }
+ 
 
   const totalStock = products.reduce((acc, product) => acc + product.stock, 0)
   const totalPrice = products.reduce((acc, product) => acc + product.price, 0)
@@ -261,6 +258,9 @@ const Dashboard = () => {
 
   return (
     <div className="pl-4 xsx:ml-[250px] min-h-screen bg-gray-100">
+      {loading ?
+    <div className="flex justify-center items-center w-full h-screen"><LoadingSpinner /></div>
+    :
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <motion.div
@@ -401,6 +401,7 @@ const Dashboard = () => {
           </TableCard>
         </div>
       </div>
+      }
     </div>
   )
 }

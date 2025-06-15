@@ -14,12 +14,14 @@ import {
   MdCancel,
 } from "react-icons/md"
 import axios from "axios"
+import LoadingSpinner from "../../utilities/LoadingSpinner"
 
 
 export default function CategoryManager() {
   const [categories, setCategories] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
   const [modalOpen, setModalOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [formData, setFormData] = useState({
     name: "",
@@ -32,6 +34,7 @@ export default function CategoryManager() {
       try {
         const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/category`);
         setCategories(response.data);
+        setLoading(false)
       } catch (error) {
         console.error('Error fetching categories:', error);
       }
@@ -174,6 +177,12 @@ export default function CategoryManager() {
     hidden: { opacity: 0 },
     visible: { opacity: 1 },
     exit: { opacity: 0 },
+  }
+
+  if (loading) {
+    return <div className="pl-[10px] bg-gray-100 xsx:ml-[280px]  min-h-screen xsx:px-[20px] pb-[35px] pr-[12px] flex flex-col justify-center">
+      <LoadingSpinner />
+    </div>;
   }
 
   return (

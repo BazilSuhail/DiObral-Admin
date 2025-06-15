@@ -3,6 +3,7 @@ import { motion } from "framer-motion"
 import { MdPerson, MdEmail, MdPhone, MdShoppingBag, MdVisibility, MdSearch } from "react-icons/md"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
+import LoadingSpinner from "../../utilities/LoadingSpinner"
 
 
 export default function UsersOrders() {
@@ -35,7 +36,9 @@ export default function UsersOrders() {
     }, []);
 
     if (loading) {
-        return <p>Loading...</p>;
+        return <div  className="pl-[10px] bg-gray-100 xsx:ml-[280px]  min-h-screen xsx:px-[20px] pb-[35px] pr-[12px] flex flex-col justify-center">
+      <LoadingSpinner/>
+    </div>;
     }
 
     if (error) {

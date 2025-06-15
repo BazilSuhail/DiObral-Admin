@@ -12,6 +12,7 @@ import {
 } from "react-icons/md"
 import ProductEditModal from "./EditProductModal"
 import axios from "axios"
+import LoadingSpinner from "../../utilities/LoadingSpinner"
 
 
 export default function ProductsTable() {
@@ -19,6 +20,7 @@ export default function ProductsTable() {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [searchTerm, setSearchTerm] = useState("")
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -26,6 +28,7 @@ export default function ProductsTable() {
                 console.log(process.env.REACT_APP_API_BASE_URL)
                 const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/products`);
                 setProducts(res.data);
+                setLoading(false)
             } catch (error) {
                 console.error('Error fetching products:', error);
             }
@@ -89,6 +92,12 @@ export default function ProductsTable() {
     const itemVariants = {
         hidden: { opacity: 0, y: 10 },
         visible: { opacity: 1, y: 0 },
+    }
+
+    if (loading) {
+        return <div className="pl-[10px] bg-gray-100 xsx:ml-[280px]  min-h-screen xsx:px-[20px] pb-[35px] pr-[12px] flex flex-col justify-center">
+            <LoadingSpinner />
+        </div>;
     }
 
     return (
@@ -323,14 +332,14 @@ export default function ProductsTable() {
                 onClose={() => setShowModal(false)}
                 product={selectedProduct}
                 onSave={async () => {
-                        try {
-                            const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/products`);
-                            setProducts(res.data);
-                        } catch (error) {
-                            console.error('Error fetching updated products:', error);
-                        }
-                        setShowModal(false); // Close the modal after saving
-                    }}
+                    try {
+                        const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/products`);
+                        setProducts(res.data);
+                    } catch (error) {
+                        console.error('Error fetching updated products:', error);
+                    }
+                    setShowModal(false); // Close the modal after saving
+                }}
             />
         </motion.div>
     )

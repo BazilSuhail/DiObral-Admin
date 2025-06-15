@@ -10,10 +10,11 @@ import {
     MdShoppingCart,
     MdCheckCircle,
 } from "react-icons/md"
-import { useLocation, useParams } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 
 export default function OrderDetails() {
     const location = useLocation();
+    const navigate = useNavigate()
     const { orderItem } = location.state || {};
     const { userId } = useParams();
 
@@ -25,6 +26,7 @@ export default function OrderDetails() {
         try {
             await axios.post(`${process.env.REACT_APP_API_BASE_URL}/completeorder/${userId}/${orderItem._id}`);
             alert('Order completed successfully');
+            navigate("/admin-orders-list")
         } catch (error) {
             alert('Error completing order');
         }

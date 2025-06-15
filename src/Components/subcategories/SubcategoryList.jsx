@@ -12,14 +12,14 @@ import {
   MdCancel,
 } from "react-icons/md"
 import axios from "axios"
-
+import LoadingSpinner from "../../utilities/LoadingSpinner";
 
 export default function SubcategoryManager() {
  
   const [subcategories, setSubcategories] = useState([]);
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("")
-  //const [modalOpen, setModalOpen] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -33,6 +33,7 @@ export default function SubcategoryManager() {
       try {
         const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/subcategories`);
         setSubcategories(res.data);
+
       } catch (error) {
         console.error('Error fetching subcategories:', error);
       }
@@ -42,6 +43,7 @@ export default function SubcategoryManager() {
       try {
         const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/category`);
         setCategories(res.data);
+        setLoading(false)
       } catch (error) {
         console.error('Error fetching categories:', error);
       }
@@ -120,20 +122,6 @@ export default function SubcategoryManager() {
     setFormData({ name: '', description: '', category: '' });
   };
 
-
-// =========
-
-  // const [subcategories, setSubcategories] = useState(mockSubcategories)
-  // const [categories] = useState(mockCategories)
-  // const [searchTerm, setSearchTerm] = useState("")
-  // const [modalOpen, setModalOpen] = useState(false)
-  // const [selectedSubcategory, setSelectedSubcategory] = useState(null)
-  // const [formData, setFormData] = useState({
-  //   name: "",
-  //   description: "",
-  //   category: "",
-  // })
-
   useEffect(() => {
     if (selectedSubcategory) {
       setFormData({
@@ -149,60 +137,6 @@ export default function SubcategoryManager() {
       })
     }
   }, [selectedSubcategory])
-
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target
-  //   setFormData({ ...formData, [name]: value })
-  // }
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault()
-  //   try {
-  //     if (selectedSubcategory) {
-  //       // Update existing subcategory
-  //       const updatedSubcategories = subcategories.map((sub) =>
-  //         sub._id === selectedSubcategory._id ? { ...sub, ...formData } : sub,
-  //       )
-  //       setSubcategories(updatedSubcategories)
-  //     } else {
-  //       // Create new subcategory
-  //       const newSubcategory = {
-  //         _id: `sub${Date.now()}`,
-  //         ...formData,
-  //       }
-  //       setSubcategories([...subcategories, newSubcategory])
-  //     }
-  //     handleCloseModal()
-  //   } catch (error) {
-  //     console.error("Error submitting form:", error)
-  //   }
-  // }
-
-  // const handleDelete = async (id) => {
-  //   if (window.confirm("Are you sure you want to delete this subcategory?")) {
-  //     try {
-  //       setSubcategories(subcategories.filter((sub) => sub._id !== id))
-  //     } catch (error) {
-  //       console.error("Error deleting subcategory:", error)
-  //     }
-  //   }
-  // }
-
-  // const handleEdit = (subcategory) => {
-  //   setSelectedSubcategory(subcategory)
-  //   setModalOpen(true)
-  // }
-
-  // const handleCreate = () => {
-  //   setSelectedSubcategory(null)
-  //   setModalOpen(true)
-  // }
-
-  // const handleCloseModal = () => {
-  //   setModalOpen(false)
-  //   setSelectedSubcategory(null)
-  //   setFormData({ name: "", description: "", category: "" })
-  // }
 
   const filteredSubcategories = subcategories.filter(
     (subcategory) =>
@@ -236,6 +170,12 @@ export default function SubcategoryManager() {
     hidden: { opacity: 0 },
     visible: { opacity: 1 },
     exit: { opacity: 0 },
+  }
+
+  if(loading){
+    return <div  className="pl-[10px] bg-gray-100 xsx:ml-[280px]  min-h-screen xsx:px-[20px] pb-[35px] pr-[12px] flex flex-col justify-center">
+      <LoadingSpinner/>
+    </div>;
   }
 
   return (

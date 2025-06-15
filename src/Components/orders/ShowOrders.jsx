@@ -11,6 +11,7 @@ import {
 } from "react-icons/md"
 import { useNavigate, useParams } from "react-router-dom"
 import axios from "axios"
+import LoadingSpinner from "../../utilities/LoadingSpinner"
 
 export default function ShowOrders() {
   const { documentId } = useParams();
@@ -36,7 +37,9 @@ export default function ShowOrders() {
   }, [documentId]);
 
   if (loading) {
-    return <p className="text-red-300 font-semibold">Loading...</p>;
+    return <div  className="pl-[10px] bg-gray-100 xsx:ml-[280px]  min-h-screen xsx:px-[20px] pb-[35px] pr-[12px] flex flex-col justify-center">
+      <LoadingSpinner/>
+    </div>;
   }
 
   if (error) {

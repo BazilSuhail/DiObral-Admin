@@ -40,4 +40,6 @@ export const put = (url, data) => apiCall(url, "PUT", data);
 export const patch = (url, data) => apiCall(url, "PATCH", data);
 export const del = (url) => apiCall(url, "DELETE");
 
+export const API_BASE_URL = api.defaults.baseURL;
+
 export default api;

@@ -1,7 +1,16 @@
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { useApiQuery, useApiMutation } from "../../api/adapter";
-import { FiTag, FiPlus, FiEdit2, FiTrash2, FiPercent, FiDollarSign, FiUsers } from "react-icons/fi";
+import { FiTag, FiPlus, FiEdit2, FiTrash2, FiPercent, FiDollarSign, FiUsers, FiToggleRight, FiAlertCircle } from "react-icons/fi";
+
+const statCards = [
+  { key: "total", label: "Total Coupons", icon: FiTag, color: "from-blue-500 to-blue-600" },
+  { key: "active", label: "Active", icon: FiToggleRight, color: "from-emerald-500 to-emerald-600" },
+  { key: "expired", label: "Expired", icon: FiAlertCircle, color: "from-red-500 to-red-600" },
+  { key: "exhausted", label: "Exhausted", icon: FiUsers, color: "from-amber-500 to-amber-600" },
+  { key: "percentage", label: "Percentage", icon: FiPercent, color: "from-violet-500 to-violet-600" },
+  { key: "fixed", label: "Fixed Amount", icon: FiDollarSign, color: "from-cyan-500 to-cyan-600" },
+];
 
 export default function CouponList() {
   const { data: coupons, isLoading } = useApiQuery("/coupons");
@@ -9,9 +18,21 @@ export default function CouponList() {
     mutationFn: (id) => import("../../api/client").then((m) => m.del(`/coupons/${id}`)),
   });
 
+  const stats = {
+    total: coupons?.length || 0,
+    active: coupons?.filter((c) => c.isActive).length || 0,
+    expired: coupons?.filter((c) => c.isExpired).length || 0,
+    exhausted: coupons?.filter((c) => c.isExhausted).length || 0,
+    percentage: coupons?.filter((c) => c.type === "percentage").length || 0,
+    fixed: coupons?.filter((c) => c.type === "fixed").length || 0,
+  };
+
   if (isLoading) {
     return (
       <div className="p-6 space-y-5">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {statCards.map((s) => <div key={s.key} className="h-24 bg-gray-100 rounded-2xl animate-pulse" />)}
+        </div>
         <div className="h-8 w-48 bg-gray-200 rounded-xl animate-pulse" />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {[1, 2, 3, 4].map((i) => <div key={i} className="h-28 bg-gray-200 rounded-2xl animate-pulse" />)}
@@ -25,7 +46,7 @@ export default function CouponList() {
       <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Coupons</h1>
-          <p className="text-sm text-gray-500 mt-0.5">{coupons?.length || 0} active promotions</p>
+          <p className="text-sm text-gray-500 mt-0.5">{coupons?.length || 0} promotions</p>
         </div>
         <Link to="/coupons/new" className="inline-flex items-center gap-2 bg-gradient-to-r from-red-600 to-red-700 text-white px-5 py-2.5 rounded-2xl font-medium text-sm hover:from-red-700 hover:to-red-800 transition-all shadow-lg shadow-red-600/20">
           <FiPlus size={16} />
@@ -37,6 +58,25 @@ export default function CouponList() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.05 }}
+        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4"
+      >
+        {statCards.map(({ key, label, icon: Icon, color }) => (
+          <div key={key} className="bg-white rounded-2xl p-4 shadow-sm shadow-black/5 flex items-start gap-3">
+            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center shadow-md flex-shrink-0`}>
+              <Icon size={17} className="text-white" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs text-gray-400 font-medium">{label}</p>
+              <p className="text-lg font-bold text-gray-900 mt-0.5">{stats[key]}</p>
+            </div>
+          </div>
+        ))}
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.08 }}
         className="grid grid-cols-1 sm:grid-cols-2 gap-5"
       >
         {coupons?.map((c, i) => (

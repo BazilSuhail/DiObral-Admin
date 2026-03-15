@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { useGlobalStore } from "../../store/globalStore";
 import {
   FiGrid, FiPackage, FiShoppingCart, FiTag, FiLayers,
-  FiSettings, FiLogOut, FiChevronLeft, FiChevronRight, FiSearch,
+  FiSettings, FiLogOut, FiChevronLeft, FiChevronRight, FiSearch, FiFolder,
 } from "react-icons/fi";
 import SearchModal from "./SearchModal";
 
@@ -18,6 +18,7 @@ const sections = [
     links: [
       { to: "/products", label: "Products", icon: FiPackage },
       { to: "/orders", label: "Orders", icon: FiShoppingCart },
+      { to: "/categories", label: "Categories", icon: FiFolder },
     ],
   },
   {
@@ -54,7 +55,7 @@ export default function Sidebar() {
       <motion.aside
         layout
         className="bg-white h-screen flex flex-col relative shadow-md shadow-black/5"
-        animate={{ width: sidebarOpen ? 256 : 72 }}
+        animate={{ width: sidebarOpen ? 230 : 72 }}
         transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
       >
         <motion.button
@@ -62,9 +63,9 @@ export default function Sidebar() {
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.92 }}
           onClick={toggleSidebar}
-          className="absolute -right-3 top-6 z-20 w-6 h-6 rounded-full bg-white border border-gray-200 shadow-md flex items-center justify-center text-gray-400 hover:text-gray-700 hover:border-gray-300 transition-all"
+          className="absolute -right-3 top-4 z-20 w-9 h-9 rounded-full bg-white border border-gray-200 shadow-md flex items-center justify-center text-gray-400 hover:text-gray-700 hover:border-gray-300 transition-all"
         >
-          {sidebarOpen ? <FiChevronLeft size={12} /> : <FiChevronRight size={12} />}
+          {sidebarOpen ? <FiChevronLeft size={18} /> : <FiChevronRight size={12} />}
         </motion.button>
 
         <div className="h-16 flex items-center px-4 overflow-hidden border-b border-gray-100">

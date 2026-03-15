@@ -3,7 +3,7 @@ import { apiCall } from "./client";
 
 export function useApiQuery(url, params, options = {}) {
   return useQuery({
-    queryKey: [url, params],
+    queryKey: params ? [url, params] : [url],
     queryFn: () => apiCall(url, "GET", null, { params }),
     ...options,
   });

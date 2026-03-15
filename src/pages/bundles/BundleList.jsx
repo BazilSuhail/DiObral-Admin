@@ -1,7 +1,16 @@
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { useApiQuery, useApiMutation } from "../../api/adapter";
-import { FiLayers, FiPlus, FiEdit2, FiTrash2, FiPercent, FiPackage, FiClock } from "react-icons/fi";
+import { FiLayers, FiPlus, FiEdit2, FiTrash2, FiPercent, FiPackage, FiClock, FiToggleRight, FiToggleLeft, FiAlertCircle } from "react-icons/fi";
+
+const statCards = [
+  { key: "total", label: "Total Bundles", icon: FiLayers, color: "from-blue-500 to-blue-600" },
+  { key: "active", label: "Active", icon: FiToggleRight, color: "from-emerald-500 to-emerald-600" },
+  { key: "inactive", label: "Inactive", icon: FiToggleLeft, color: "from-gray-500 to-gray-600" },
+  { key: "expired", label: "Expired", icon: FiAlertCircle, color: "from-red-500 to-red-600" },
+  { key: "scheduled", label: "Scheduled", icon: FiClock, color: "from-amber-500 to-amber-600" },
+  { key: "totalItems", label: "Total Items", icon: FiPackage, color: "from-violet-500 to-violet-600" },
+];
 
 export default function BundleList() {
   const { data: bundles, isLoading } = useApiQuery("/bundles");
@@ -9,9 +18,21 @@ export default function BundleList() {
     mutationFn: (id) => import("../../api/client").then((m) => m.del(`/bundles/${id}`)),
   });
 
+  const stats = {
+    total: bundles?.length || 0,
+    active: bundles?.filter((b) => b.isActive).length || 0,
+    inactive: bundles?.filter((b) => !b.isActive && !b.isExpired).length || 0,
+    expired: bundles?.filter((b) => b.isExpired).length || 0,
+    scheduled: bundles?.filter((b) => b.isScheduled).length || 0,
+    totalItems: bundles?.reduce((sum, b) => sum + (b.items?.length || 0), 0) || 0,
+  };
+
   if (isLoading) {
     return (
       <div className="p-6 space-y-5">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {statCards.map((s) => <div key={s.key} className="h-24 bg-gray-100 rounded-2xl animate-pulse" />)}
+        </div>
         <div className="h-8 w-48 bg-gray-200 rounded-xl animate-pulse" />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           {[1, 2, 3, 4].map((i) => <div key={i} className="h-32 bg-gray-200 rounded-2xl animate-pulse" />)}
@@ -37,6 +58,25 @@ export default function BundleList() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.05 }}
+        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4"
+      >
+        {statCards.map(({ key, label, icon: Icon, color }) => (
+          <div key={key} className="bg-white rounded-2xl p-4 shadow-sm shadow-black/5 flex items-start gap-3">
+            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center shadow-md flex-shrink-0`}>
+              <Icon size={17} className="text-white" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-xs text-gray-400 font-medium">{label}</p>
+              <p className="text-lg font-bold text-gray-900 mt-0.5">{stats[key]}</p>
+            </div>
+          </div>
+        ))}
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.08 }}
         className="grid grid-cols-1 sm:grid-cols-2 gap-5"
       >
         {bundles?.map((b, i) => {

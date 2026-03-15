@@ -13,6 +13,7 @@ import CouponForm from "./pages/coupons/CouponForm";
 import BundleList from "./pages/bundles/BundleList";
 import BundleForm from "./pages/bundles/BundleForm";
 import StorePage from "./pages/store/StorePage";
+import CategoryList from "./pages/categories/CategoryList";
 
 function ProtectedRoute({ children }) {
   const isAuthenticated = useGlobalStore((s) => s.isAuthenticated);
@@ -43,6 +44,7 @@ export default function App() {
           <Route path="bundles" element={<BundleList />} />
           <Route path="bundles/new" element={<BundleForm />} />
           <Route path="bundles/:id/edit" element={<BundleForm />} />
+          <Route path="categories" element={<CategoryList />} />
           <Route path="store" element={<StorePage />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

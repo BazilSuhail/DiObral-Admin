@@ -1,21 +1,29 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { useApiQuery } from "../../api/adapter";
-import { FiFolder, FiSearch, FiX, FiChevronRight, FiCheck } from "react-icons/fi";
-
-function flattenTree(items, depth = 0) {
-  let result = [];
-  items?.forEach((cat) => {
-    result.push({ ...cat, depth });
-    if (cat.children?.length) result = result.concat(flattenTree(cat.children, depth + 1));
-  });
-  return result;
-}
+import { useApiQuery, useApiMutation } from "../../api/adapter";
+import {
+  FiFolder, FiSearch, FiX, FiChevronRight, FiChevronDown,
+  FiCheck, FiPlus, FiTrash2,
+} from "react-icons/fi";
 
 export default function CategoryModal({ onSelect, onClose }) {
   const inputRef = useRef(null);
   const [query, setQuery] = useState("");
-  const { data: categories } = useApiQuery("/categories");
+  const [expanded, setExpanded] = useState({});
+  const [adding, setAdding] = useState(null);
+  const [newName, setNewName] = useState("");
+
+  const { data: rootCategories } = useApiQuery("/categories");
+  const { data: retailerCats } = useApiQuery("/retailer/categories");
+
+  const { mutate: createCat, isPending: creating } = useApiMutation(
+    "/retailer/categories", "POST",
+    { onSuccess: () => { setAdding(null); setNewName(""); } }
+  );
+
+  const { mutate: deleteCat } = useApiMutation(null, "DELETE", {
+    mutationFn: (id) => import("../../api/client").then((m) => m.del(`/retailer/categories/${id}`)),
+  });
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -28,10 +36,23 @@ export default function CategoryModal({ onSelect, onClose }) {
     };
   }, [onClose]);
 
-  const flat = flattenTree(categories);
-  const filtered = query.trim()
-    ? flat.filter((cat) => cat.name?.toLowerCase().includes(query.toLowerCase()))
-    : flat;
+  const toggle = (id) => setExpanded((p) => ({ ...p, [id]: !p[id] }));
+
+  const retailerByParent = {};
+  retailerCats?.forEach((c) => {
+    if (!retailerByParent[c.parent]) retailerByParent[c.parent] = [];
+    retailerByParent[c.parent].push(c);
+  });
+
+  const allSubs = (rootId) => {
+    const system = rootCategories?.find((r) => r._id === rootId)?.children || [];
+    const retailer = retailerByParent[rootId] || [];
+    return [...system, ...retailer];
+  };
+
+  const filterRoots = query.trim()
+    ? rootCategories?.filter((r) => r.name?.toLowerCase().includes(query.toLowerCase()))
+    : rootCategories;
 
   return (
     <AnimatePresence>
@@ -66,26 +87,96 @@ export default function CategoryModal({ onSelect, onClose }) {
             </button>
           </div>
 
-          <div className="max-h-72 overflow-y-auto p-2">
-            {filtered.length === 0 && (
+          <div className="max-h-80 overflow-y-auto p-2">
+            {(!filterRoots || filterRoots.length === 0) && (
               <p className="text-center text-sm text-gray-400 py-8">No categories found</p>
             )}
-            {filtered.map((cat) => (
-              <button
-                key={cat._id}
-                onClick={() => { onSelect({ _id: cat._id, name: cat.name }); onClose(); }}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-all text-left group"
-              >
-                <div className="relative">
-                  {Array.from({ length: cat.depth }).map((_, i) => (
-                    <span key={i} className="inline-block w-4" />
-                  ))}
-                  <FiFolder size={15} className="text-amber-500 inline" />
+            {filterRoots?.map((root) => (
+              <div key={root._id}>
+                <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-all group">
+                  <button
+                    onClick={() => toggle(root._id)}
+                    className="p-0.5 rounded hover:bg-gray-200 transition-colors"
+                  >
+                    {expanded[root._id]
+                      ? <FiChevronDown size={14} className="text-gray-400" />
+                      : <FiChevronRight size={14} className="text-gray-400" />}
+                  </button>
+                  <button
+                    onClick={() => { onSelect({ category: root._id, subcategory: null, name: root.name }); onClose(); }}
+                    className="flex items-center gap-2 flex-1 text-left"
+                  >
+                    <FiFolder size={15} className="text-amber-500" />
+                    <span className="text-sm font-medium text-gray-700">{root.name}</span>
+                    {root.slug && <span className="text-[10px] text-gray-300">/{root.slug}</span>}
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setAdding(adding === root._id ? null : root._id); setNewName(""); }}
+                    className="p-1 rounded-lg text-gray-300 hover:text-red-600 hover:bg-red-50 transition-all opacity-0 group-hover:opacity-100"
+                    title="Add subcategory"
+                  >
+                    <FiPlus size={14} />
+                  </button>
                 </div>
-                <span className="text-sm font-medium text-gray-700">{cat.name}</span>
-                {cat.slug && <span className="text-[10px] text-gray-300">/{cat.slug}</span>}
-                <FiChevronRight size={12} className="ml-auto text-gray-300 group-hover:text-gray-500 transition-colors" />
-              </button>
+
+                {expanded[root._id] && (
+                  <div className="ml-6 pl-2 border-l-2 border-gray-100 space-y-0.5">
+                    {allSubs(root._id).map((sub) => (
+                      <div key={sub._id} className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-gray-50 transition-all group">
+                        <button
+                          onClick={() => {
+                            onSelect({
+                              category: root._id,
+                              subcategory: sub._id,
+                              name: `${root.name} › ${sub.name}`,
+                            });
+                            onClose();
+                          }}
+                          className="flex items-center gap-2 flex-1 text-left"
+                        >
+                          <FiFolder size={13} className="text-gray-400" />
+                          <span className="text-sm text-gray-600">{sub.name}</span>
+                          {sub.isSystem && <span className="text-[9px] text-gray-300 bg-gray-100 px-1.5 py-0.5 rounded">system</span>}
+                        </button>
+                        {!sub.isSystem && (
+                          <button
+                            onClick={() => deleteCat(sub._id)}
+                            className="p-1 rounded-lg text-gray-300 hover:text-red-600 hover:bg-red-50 transition-all opacity-0 group-hover:opacity-100"
+                            title="Delete"
+                          >
+                            <FiTrash2 size={12} />
+                          </button>
+                        )}
+                      </div>
+                    ))}
+
+                    {adding === root._id && (
+                      <div className="flex items-center gap-2 px-3 py-2">
+                        <input
+                          autoFocus
+                          value={newName}
+                          onChange={(e) => setNewName(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" && newName.trim()) {
+                              createCat({ name: newName.trim(), parent: root._id });
+                            }
+                            if (e.key === "Escape") { setAdding(null); setNewName(""); }
+                          }}
+                          placeholder="Subcategory name..."
+                          className="flex-1 text-sm px-3 py-1.5 rounded-xl bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-red-500/20"
+                        />
+                        <button
+                          onClick={() => { if (newName.trim()) createCat({ name: newName.trim(), parent: root._id }); }}
+                          disabled={!newName.trim() || creating}
+                          className="px-3 py-1.5 rounded-xl bg-red-600 text-white text-xs font-medium hover:bg-red-700 disabled:opacity-50 transition-all"
+                        >
+                          Create
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </motion.div>

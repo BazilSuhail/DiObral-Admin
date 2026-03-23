@@ -1,16 +1,12 @@
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { useApiQuery, useApiMutation } from "../../api/adapter";
-import { FiTag, FiPlus, FiEdit2, FiTrash2, FiPercent, FiDollarSign, FiUsers, FiToggleRight, FiAlertCircle } from "react-icons/fi";
-
-const statCards = [
-  { key: "total", label: "Total Coupons", icon: FiTag, color: "from-blue-500 to-blue-600" },
-  { key: "active", label: "Active", icon: FiToggleRight, color: "from-emerald-500 to-emerald-600" },
-  { key: "expired", label: "Expired", icon: FiAlertCircle, color: "from-red-500 to-red-600" },
-  { key: "exhausted", label: "Exhausted", icon: FiUsers, color: "from-amber-500 to-amber-600" },
-  { key: "percentage", label: "Percentage", icon: FiPercent, color: "from-violet-500 to-violet-600" },
-  { key: "fixed", label: "Fixed Amount", icon: FiDollarSign, color: "from-cyan-500 to-cyan-600" },
-];
+import PageBanner from "../../components/shared/PageBanner";
+import StatCard from "../../components/shared/StatCard";
+import {
+  FiTag, FiPlus, FiEdit2, FiTrash2, FiPercent, FiDollarSign,
+  FiUsers, FiToggleRight, FiAlertCircle,
+} from "react-icons/fi";
 
 export default function CouponList() {
   const { data: coupons, isLoading } = useApiQuery("/coupons");
@@ -29,26 +25,46 @@ export default function CouponList() {
 
   if (isLoading) {
     return (
-      <div className="p-6 space-y-5">
+      <div className="px-2 lg:px-6 py-6 space-y-6">
+        <div className="h-24 bg-secondary rounded-2xl animate-pulse" />
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {statCards.map((s) => <div key={s.key} className="h-24 bg-gray-100 rounded-2xl animate-pulse" />)}
+          {[1, 2, 3, 4, 5, 6].map((i) => <div key={i} className="h-28 bg-secondary rounded-2xl animate-pulse" />)}
         </div>
-        <div className="h-8 w-48 bg-gray-200 rounded-xl animate-pulse" />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {[1, 2, 3, 4].map((i) => <div key={i} className="h-28 bg-gray-200 rounded-2xl animate-pulse" />)}
+          {[1, 2, 3, 4].map((i) => <div key={i} className="h-28 bg-secondary rounded-2xl animate-pulse" />)}
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-6 space-y-6">
-      <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Coupons</h1>
-          <p className="text-sm text-gray-500 mt-0.5">{coupons?.length || 0} promotions</p>
-        </div>
-        <Link to="/coupons/new" className="inline-flex items-center gap-2 bg-gradient-to-r from-red-600 to-red-700 text-white px-5 py-2.5 rounded-2xl font-medium text-sm hover:from-red-700 hover:to-red-800 transition-all shadow-lg shadow-red-600/20">
+    <div className="px-2 lg:px-6 py-6 space-y-6 max-w-[1400px] mx-auto">
+      <PageBanner
+        title="Coupons"
+        subtitle={`${coupons?.length || 0} promotions`}
+        routes={[{ label: "Coupons" }]}
+        icon={FiTag}
+      />
+
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <StatCard icon={FiTag} label="Total Coupons" value={stats.total} />
+        <StatCard icon={FiToggleRight} label="Active" value={stats.active} />
+        <StatCard icon={FiAlertCircle} label="Expired" value={stats.expired} trend={stats.expired > 0 ? "down" : "neutral"} />
+        <StatCard icon={FiUsers} label="Exhausted" value={stats.exhausted} />
+        <StatCard icon={FiPercent} label="Percentage" value={stats.percentage} />
+        <StatCard icon={FiDollarSign} label="Fixed Amount" value={stats.fixed} />
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.08 }}
+        className="flex justify-end"
+      >
+        <Link
+          to="/coupons/new"
+          className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-red-600 to-red-700 text-white px-5 py-2.5 rounded-2xl font-medium text-sm hover:from-red-700 hover:to-red-800 transition-all shadow-lg shadow-red-600/20"
+        >
           <FiPlus size={16} />
           Add Coupon
         </Link>
@@ -57,26 +73,7 @@ export default function CouponList() {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.05 }}
-        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4"
-      >
-        {statCards.map(({ key, label, icon: Icon, color }) => (
-          <div key={key} className="bg-white rounded-2xl p-4 shadow-sm shadow-black/5 flex items-start gap-3">
-            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center shadow-md flex-shrink-0`}>
-              <Icon size={17} className="text-white" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs text-gray-400 font-medium">{label}</p>
-              <p className="text-lg font-bold text-gray-900 mt-0.5">{stats[key]}</p>
-            </div>
-          </div>
-        ))}
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.08 }}
+        transition={{ delay: 0.1 }}
         className="grid grid-cols-1 sm:grid-cols-2 gap-5"
       >
         {coupons?.map((c, i) => (
@@ -86,23 +83,23 @@ export default function CouponList() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.07 + i * 0.04 }}
             whileHover={{ y: -3 }}
-            className="bg-white/90 backdrop-blur-sm rounded-2xl p-5 shadow-md shadow-black/5 relative overflow-hidden"
+            className="bg-white rounded-2xl border border-secondary shadow-sm p-5 relative overflow-hidden"
           >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-red-50/30 to-transparent rounded-bl-full" />
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-red-50/40 to-transparent rounded-bl-full" />
             <div className="flex items-start justify-between relative">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 min-w-0">
                 <motion.div
                   whileHover={{ rotate: 15, scale: 1.1 }}
-                  className="w-12 h-12 rounded-2xl bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center shadow-sm"
+                  className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0"
                 >
-                  {c.type === "percentage" ? <FiPercent size={20} className="text-red-600" /> : <FiDollarSign size={20} className="text-red-600" />}
+                  {c.type === "percentage" ? <FiPercent size={20} className="text-primary" /> : <FiDollarSign size={20} className="text-primary" />}
                 </motion.div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <p className="font-bold text-lg text-gray-900">{c.code}</p>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <p className="font-bold text-lg text-ink truncate">{c.code}</p>
                     {c.isExpired && <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-600">Expired</span>}
                     {c.isExhausted && <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-600">Exhausted</span>}
-                    {!c.isActive && !c.isExpired && <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500">Off</span>}
+                    {!c.isActive && !c.isExpired && <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-secondary text-gray-500">Off</span>}
                   </div>
                   <p className="text-sm text-gray-500 mt-0.5">
                     {c.type === "percentage" ? `${c.value}% off` : `$${c.value} off`}
@@ -110,11 +107,11 @@ export default function CouponList() {
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-1">
-                <Link to={`/coupons/${c._id}/edit`} className="p-2 rounded-xl hover:bg-gray-100 text-gray-400 hover:text-red-600 transition-colors">
+              <div className="flex items-center gap-1 flex-shrink-0">
+                <Link to={`/coupons/${c._id}/edit`} className="p-2 rounded-xl hover:bg-secondary text-gray-400 hover:text-primary transition-colors" title="Edit">
                   <FiEdit2 size={15} />
                 </Link>
-                <button onClick={() => deleteCoupon(c._id)} className="p-2 rounded-xl hover:bg-red-50 text-gray-400 hover:text-red-600 transition-colors">
+                <button onClick={() => deleteCoupon(c._id)} className="p-2 rounded-xl hover:bg-red-50 text-gray-400 hover:text-red-600 transition-colors" title="Delete">
                   <FiTrash2 size={15} />
                 </button>
               </div>

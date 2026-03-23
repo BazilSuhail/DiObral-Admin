@@ -52,8 +52,8 @@ const features = [
 export default function LoginPage() {
   const navigate = useNavigate();
   const login = useGlobalStore((s) => s.login);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("corefit@gmail.com");
+  const [password, setPassword] = useState("112233");
   const [showPw, setShowPw] = useState(false);
 
   const { mutate, isPending, error } = useApiMutation("/auth/login", "POST", {
@@ -102,7 +102,7 @@ export default function LoginPage() {
           transition={{ duration: 0.5 }}
           className="flex items-center gap-3"
         >
-          <img src="/diobral.png" alt="DiObral" className="w-9 h-9 object-contain" />
+          <img src="/diobral.webp" alt="DiObral" className="w-9 h-9 object-contain" />
           <span className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">DiObral</span>
         </motion.div>
 
@@ -182,7 +182,7 @@ export default function LoginPage() {
         >
           {/* Mobile Only Header */}
           <div className="lg:hidden flex items-center gap-2 mb-10">
-            <img src="/diobral.png" alt="DiObral" className="w-8 h-8" />
+            <img src="/diobral.webp" alt="DiObral" className="w-8 h-8" />
             <span className="font-bold text-gray-800 text-lg">DiObral</span>
           </div>
 

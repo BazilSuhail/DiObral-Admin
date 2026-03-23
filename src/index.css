@@ -1,11 +1,19 @@
 @import "tailwindcss";
 
+@theme {
+  --color-primary: #dc2626;
+  --color-rose: #f43f5e;
+  --color-secondary: #f3f4f6;
+  --color-ink: #202124;
+  --font-sans: "Poppins", Arial, Helvetica, sans-serif;
+}
+
 * {
-  font-family: "Poppins", sans-serif;
+  font-family: var(--font-sans);
 }
 
 body {
-  @apply bg-gray-50 text-gray-900 antialiased;
+  @apply bg-gray-50 text-ink antialiased;
 }
 
 ::-webkit-scrollbar {

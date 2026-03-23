@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useGlobalStore } from "./store/globalStore";
 import DashboardLayout from "./components/layout/Layout";
 import LoginPage from "./pages/auth/LoginPage";
@@ -14,6 +14,8 @@ import BundleList from "./pages/bundles/BundleList";
 import BundleForm from "./pages/bundles/BundleForm";
 import StorePage from "./pages/store/StorePage";
 import CategoryList from "./pages/categories/CategoryList";
+import { getPageMeta } from "./lib/routeMeta";
+import { useEffect } from "react";
 
 function ProtectedRoute({ children }) {
   const isAuthenticated = useGlobalStore((s) => s.isAuthenticated);
@@ -28,6 +30,7 @@ function PublicRoute({ children }) {
 export default function App() {
   return (
     <BrowserRouter>
+      <TitleUpdater />
       <Routes>
         <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
         <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
@@ -51,4 +54,15 @@ export default function App() {
       </Routes>
     </BrowserRouter>
   );
+}
+
+function TitleUpdater() {
+  const location = useLocation();
+  const { title } = getPageMeta(location.pathname);
+
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
+
+  return null;
 }

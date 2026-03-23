@@ -6,4 +6,5 @@ dist
 .DS_Store
 *.log
 *.bat
+*.toml
 *.txt

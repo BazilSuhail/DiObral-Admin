@@ -1,30 +1,69 @@
 import { motion } from "motion/react";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  ArcElement,
+  Tooltip,
+  Legend,
+  Filler,
+} from "chart.js";
+import { Line, Doughnut } from "react-chartjs-2";
 import { useApiQuery } from "../../api/adapter";
+import PageBanner from "../../components/shared/PageBanner";
+import StatCard from "../../components/shared/StatCard";
+import { useGlobalStore } from "../../store/globalStore";
 import {
   FiPackage, FiClock, FiDollarSign, FiStar, FiTrendingUp,
-  FiShoppingCart, FiArrowUp, FiArrowDown, FiUsers,
+  FiShoppingCart, FiGrid, FiPieChart,
 } from "react-icons/fi";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  ArcElement,
+  Tooltip,
+  Legend,
+  Filler
+);
+
+const PRIMARY = "#DC2626";
 
 const container = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.06 } },
+  show: { opacity: 1, transition: { staggerChildren: 0.05 } },
 };
 
 const item = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 18 },
   show: { opacity: 1, y: 0 },
+};
+
+const statusPill = {
+  pending: "bg-amber-50 text-amber-600",
+  processing: "bg-primary/10 text-primary",
+  shipped: "bg-blue-50 text-blue-600",
+  delivered: "bg-emerald-50 text-emerald-600",
+  cancelled: "bg-red-50 text-red-500",
+  default: "bg-secondary text-gray-500",
 };
 
 export default function DashboardPage() {
   const { data, isLoading } = useApiQuery("/retailer/dashboard");
+  const user = useGlobalStore((s) => s.user);
+  const firstName = user?.fullName?.split(" ")[0] || user?.fullName || "there";
 
   if (isLoading) {
     return (
-      <div className="p-6 space-y-6">
-        <div className="h-8 w-48 bg-gray-200 rounded-xl animate-pulse" />
+      <div className="px-2 lg:px-6 py-6 space-y-6">
+        <div className="h-24 bg-secondary rounded-2xl animate-pulse" />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-32 bg-gray-200 rounded-2xl animate-pulse" />
+            <div key={i} className="h-32 bg-secondary rounded-2xl animate-pulse" />
           ))}
         </div>
       </div>
@@ -33,12 +72,113 @@ export default function DashboardPage() {
 
   const { products, orders, revenue, topProducts, ratings, trends } = data || {};
 
+  const monthlyTrend = Array.isArray(trends?.monthly) ? trends.monthly : [];
+  const trendLabels = monthlyTrend.map((t) => t?.month ?? "");
+  const trendValues = monthlyTrend.map((t) => Number(t?.revenue ?? 0));
+
+  const hasTrend = trendValues.length > 0;
+
+  const orderBreakdown = [
+    { label: "Pending", value: orders?.pending || 0, color: "#F87171" },
+    { label: "Processing", value: orders?.processing || 0, color: "#F43F5E" },
+    { label: "Shipped", value: orders?.shipped || 0, color: "#E11D48" },
+    { label: "Delivered", value: orders?.delivered || 0, color: "#DC2626" },
+    { label: "Cancelled", value: orders?.cancelled || 0, color: "#FECACA" },
+  ];
+  const orderTotal = orderBreakdown.reduce((s, o) => s + (o.value || 0), 0);
+
+  const revenueChart = {
+    labels: trendLabels,
+    datasets: [
+      {
+        label: "Revenue",
+        data: trendValues,
+        borderColor: PRIMARY,
+        backgroundColor: (context) => {
+          const { ctx, chartArea } = context.chart;
+          if (!chartArea) return "rgba(220,38,38,0.12)";
+          const g = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+          g.addColorStop(0, "rgba(220,38,38,0.22)");
+          g.addColorStop(1, "rgba(220,38,38,0)");
+          return g;
+        },
+        fill: true,
+        tension: 0.4,
+        borderWidth: 2.5,
+        pointBackgroundColor: "#FFFFFF",
+        pointBorderColor: PRIMARY,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+      },
+    ],
+  };
+
+  const revenueOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: "#202124",
+        padding: 10,
+        cornerRadius: 10,
+        titleFont: { family: "Poppins", size: 12 },
+        bodyFont: { family: "Poppins", size: 12 },
+        callbacks: { label: (c) => ` $${c.parsed.y.toLocaleString()}` },
+      },
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { color: "#9AA0A6", font: { family: "Poppins", size: 11 }, maxTicksLimit: 8 },
+      },
+      y: {
+        grid: { color: "rgba(241,243,244,0.9)" },
+        border: { display: false },
+        ticks: {
+          color: "#9AA0A6",
+          font: { family: "Poppins", size: 11 },
+          callback: (v) => `$${v.toLocaleString()}`,
+        },
+      },
+    },
+  };
+
+  const statusChart = {
+    labels: orderBreakdown.map((o) => o.label),
+    datasets: [
+      {
+        data: orderBreakdown.map((o) => o.value),
+        backgroundColor: orderBreakdown.map((o) => o.color),
+        borderWidth: 0,
+        hoverOffset: 6,
+      },
+    ],
+  };
+
+  const statusOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: "68%",
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: "#202124",
+        padding: 10,
+        cornerRadius: 10,
+        titleFont: { family: "Poppins", size: 12 },
+        bodyFont: { family: "Poppins", size: 12 },
+      },
+    },
+  };
+
   return (
-    <div className="p-6 space-y-6">
-      <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-sm text-gray-500 mt-0.5">Your store at a glance</p>
-      </motion.div>
+    <div className="px-2 lg:px-6 py-6 space-y-6 max-w-[1400px] mx-auto">
+      <PageBanner
+        title="Dashboard"
+        subtitle={`Welcome back, ${firstName}!`}
+        icon={FiGrid}
+      />
 
       <motion.div
         variants={container}
@@ -52,8 +192,7 @@ export default function DashboardPage() {
           value={products?.total}
           change="+3 this month"
           trend="up"
-          gradient="from-red-500 to-red-600"
-          shadow="shadow-red-600/20"
+          delay={0}
         />
         <StatCard
           icon={FiClock}
@@ -61,8 +200,7 @@ export default function DashboardPage() {
           value={orders?.pending}
           change={`${orders?.processing || 0} processing`}
           trend="neutral"
-          gradient="from-amber-500 to-amber-600"
-          shadow="shadow-amber-600/20"
+          delay={0.05}
         />
         <StatCard
           icon={FiDollarSign}
@@ -70,8 +208,7 @@ export default function DashboardPage() {
           value={`$${revenue?.total30d?.toFixed(2) || "0.00"}`}
           change={`${revenue?.orders30d || 0} orders`}
           trend="up"
-          gradient="from-emerald-500 to-emerald-600"
-          shadow="shadow-emerald-600/20"
+          delay={0.1}
         />
         <StatCard
           icon={FiStar}
@@ -79,8 +216,7 @@ export default function DashboardPage() {
           value={ratings?.average?.toFixed(1) || "—"}
           change={`${ratings?.total || 0} reviews`}
           trend={ratings?.average >= 4 ? "up" : "neutral"}
-          gradient="from-violet-500 to-violet-600"
-          shadow="shadow-violet-600/20"
+          delay={0.15}
         />
       </motion.div>
 
@@ -89,45 +225,108 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="lg:col-span-2 bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-md shadow-black/5"
+          className="lg:col-span-2 bg-white rounded-2xl border border-secondary shadow-sm p-6"
         >
           <div className="flex items-center justify-between mb-5">
-            <h2 className="font-semibold text-gray-900 flex items-center gap-2">
-              <FiShoppingCart size={16} className="text-red-600" />
+            <h2 className="font-semibold text-ink flex items-center gap-2">
+              <FiTrendingUp size={16} className="text-primary" />
+              Revenue Trend
+            </h2>
+            <span className="text-xs text-gray-400 bg-secondary px-2.5 py-1 rounded-full">12 months</span>
+          </div>
+          <div className="h-72">
+            {hasTrend ? (
+              <Line data={revenueChart} options={revenueOptions} />
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center text-gray-400 gap-2">
+                <FiTrendingUp size={28} className="opacity-40" />
+                <p className="text-sm">No revenue data yet</p>
+              </div>
+            )}
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className="bg-white rounded-2xl border border-secondary shadow-sm p-6"
+        >
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="font-semibold text-ink flex items-center gap-2">
+              <FiPieChart size={16} className="text-primary" />
+              Order Status
+            </h2>
+            <span className="text-xs text-gray-400 bg-secondary px-2.5 py-1 rounded-full">{orderTotal} total</span>
+          </div>
+          {orderTotal > 0 ? (
+            <div className="flex items-center gap-6">
+              <div className="relative h-44 w-44 flex-shrink-0">
+                <Doughnut data={statusChart} options={statusOptions} />
+                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                  <span className="text-2xl font-bold text-ink">{orderTotal}</span>
+                  <span className="text-[10px] text-gray-400 uppercase tracking-wider">Orders</span>
+                </div>
+              </div>
+              <div className="flex-1 space-y-2.5 min-w-0">
+                {orderBreakdown.map((o) => (
+                  <div key={o.label} className="flex items-center gap-2.5">
+                    <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: o.color }} />
+                    <span className="text-sm text-gray-600 flex-1 capitalize">{o.label}</span>
+                    <span className="text-sm font-semibold text-ink">{o.value || 0}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="h-44 flex flex-col items-center justify-center text-gray-400 gap-2">
+              <FiPieChart size={28} className="opacity-40" />
+              <p className="text-sm">No orders yet</p>
+            </div>
+          )}
+        </motion.div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="lg:col-span-2 bg-white rounded-2xl border border-secondary shadow-sm p-6"
+        >
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="font-semibold text-ink flex items-center gap-2">
+              <FiShoppingCart size={16} className="text-primary" />
               Recent Orders
             </h2>
-            <span className="text-xs text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">Last 5</span>
+            <span className="text-xs text-gray-400 bg-secondary px-2.5 py-1 rounded-full">Last 5</span>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-1">
             {orders?.recent?.slice(0, 5).map((o, i) => (
               <motion.div
                 key={o._id}
                 initial={{ opacity: 0, x: -15 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.25 + i * 0.05 }}
-                className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50/80 transition-colors"
+                transition={{ delay: 0.32 + i * 0.05 }}
+                className="flex items-center justify-between p-3 rounded-xl hover:bg-secondary/60 transition-colors"
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 min-w-0">
                   <motion.div
-                    whileHover={{ scale: 1.1, rotate: 10 }}
-                    className="w-9 h-9 rounded-xl bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center"
+                    whileHover={{ scale: 1.1, rotate: 8 }}
+                    className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0"
                   >
-                    <FiShoppingCart size={15} className="text-red-600" />
+                    <FiShoppingCart size={15} className="text-primary" />
                   </motion.div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-700">{o.customer?.fullName || "Guest"}</p>
-                    <p className="text-xs text-gray-400">{new Date(o.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</p>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-ink truncate">{o.customer?.fullName || "Guest"}</p>
+                    <p className="text-xs text-gray-400">
+                      {new Date(o.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                    </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-sm font-semibold text-gray-900">${o.total}</span>
-                  <span className={`text-xs px-2.5 py-1 rounded-full font-medium capitalize ${
-                    o.status === "delivered" ? "bg-emerald-50 text-emerald-600" :
-                    o.status === "pending" ? "bg-amber-50 text-amber-600" :
-                    o.status === "shipped" ? "bg-blue-50 text-blue-600" :
-                    o.status === "processing" ? "bg-purple-50 text-purple-600" :
-                    "bg-gray-100 text-gray-600"
-                  }`}>
+                <div className="flex items-center gap-3 flex-shrink-0">
+                  <span className="text-sm font-semibold text-ink">${o.total}</span>
+                  <span className={`text-xs px-2.5 py-1 rounded-full font-medium capitalize ${statusPill[o.status] || statusPill.default}`}>
                     {o.status}
                   </span>
                 </div>
@@ -142,13 +341,13 @@ export default function DashboardPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25 }}
+          transition={{ delay: 0.35 }}
           className="space-y-6"
         >
-          <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-md shadow-black/5">
+          <div className="bg-white rounded-2xl border border-secondary shadow-sm p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="font-semibold text-gray-900 flex items-center gap-2">
-                <FiTrendingUp size={16} className="text-red-600" />
+              <h2 className="font-semibold text-ink flex items-center gap-2">
+                <FiTrendingUp size={16} className="text-primary" />
                 Top Products
               </h2>
             </div>
@@ -158,18 +357,18 @@ export default function DashboardPage() {
                   key={p._id}
                   initial={{ opacity: 0, x: 15 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3 + i * 0.06 }}
+                  transition={{ delay: 0.38 + i * 0.06 }}
                   className="flex items-center gap-3"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden flex-shrink-0 shadow-sm">
+                  <div className="w-10 h-10 rounded-md bg-secondary overflow-hidden flex-shrink-0 shadow-sm">
                     {p.image ? (
-                      <img src={`http://localhost:5000/uploads/${p.image}`} alt="" className="w-full h-full object-cover" />
+                      <img src={`${import.meta.env.VITE_API_BASE_URL}/uploads/${p.image}`} alt="" className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs font-bold">#{i + 1}</div>
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-700 truncate">{p.name}</p>
+                    <p className="text-sm font-medium text-ink truncate">{p.name}</p>
                     <div className="flex items-center gap-2 text-xs text-gray-400">
                       <span>{p.quantitySold} sold</span>
                       <span className="w-1 h-1 rounded-full bg-gray-300" />
@@ -185,9 +384,9 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-md shadow-black/5">
-            <h2 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-              <FiPackage size={16} className="text-red-600" />
+          <div className="bg-white rounded-2xl border border-secondary shadow-sm p-6">
+            <h2 className="font-semibold text-ink mb-3 flex items-center gap-2">
+              <FiPackage size={16} className="text-primary" />
               Low Stock
             </h2>
             {products?.lowStockItems?.length > 0 ? (
@@ -201,13 +400,7 @@ export default function DashboardPage() {
                     className="flex items-center justify-between"
                   >
                     <span className="text-sm text-gray-600 truncate">{item.name}</span>
-                    <motion.span
-                      animate={{ scale: [1, 1.1, 1] }}
-                      transition={{ repeat: Infinity, duration: 2, delay: i * 0.3 }}
-                      className="text-sm font-semibold text-red-600"
-                    >
-                      {item.stock}
-                    </motion.span>
+                    <span className="text-sm font-semibold text-primary">{item.stock}</span>
                   </motion.div>
                 ))}
               </div>
@@ -218,38 +411,5 @@ export default function DashboardPage() {
         </motion.div>
       </div>
     </div>
-  );
-}
-
-function StatCard({ icon: Icon, label, value, change, trend, gradient, shadow }) {
-  return (
-    <motion.div
-      variants={item}
-      whileHover={{ y: -4, transition: { duration: 0.2 } }}
-      className="bg-white/90 backdrop-blur-sm rounded-2xl p-5 shadow-md shadow-black/5 border border-white/50 relative overflow-hidden group"
-    >
-      <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-gray-50/50 to-transparent rounded-bl-full" />
-      <div className="flex items-start justify-between relative">
-        <div className="space-y-1.5">
-          <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">{label}</p>
-          <p className="text-2xl font-bold text-gray-900">{value ?? "—"}</p>
-          {change && (
-            <div className="flex items-center gap-1 text-xs">
-              {trend === "up" && <FiArrowUp size={11} className="text-emerald-500" />}
-              {trend === "down" && <FiArrowDown size={11} className="text-red-500" />}
-              <span className={trend === "up" ? "text-emerald-600" : trend === "down" ? "text-red-600" : "text-gray-400"}>
-                {change}
-              </span>
-            </div>
-          )}
-        </div>
-        <motion.div
-          whileHover={{ rotate: 15, scale: 1.1 }}
-          className={`w-11 h-11 rounded-2xl bg-gradient-to-br ${gradient} flex items-center justify-center shadow-lg ${shadow}`}
-        >
-          <Icon size={18} className="text-white" />
-        </motion.div>
-      </div>
-    </motion.div>
   );
 }

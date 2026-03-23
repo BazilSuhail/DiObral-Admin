@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { useGlobalStore } from "../../store/globalStore";
 import {
   FiGrid, FiPackage, FiShoppingCart, FiTag, FiLayers,
-  FiSettings, FiLogOut, FiChevronLeft, FiChevronRight, FiSearch, FiFolder,
+  FiSettings, FiLogOut, FiChevronLeft, FiChevronRight, FiSearch, FiFolder, FiX,
 } from "react-icons/fi";
 import SearchModal from "./SearchModal";
 
@@ -42,37 +42,51 @@ const navItem = {
   }),
 };
 
-export default function Sidebar() {
+export default function Sidebar({ mobile = false, onClose }) {
   const { sidebarOpen, toggleSidebar, logout } = useGlobalStore();
   const location = useLocation();
   const user = useGlobalStore((s) => s.user);
   const [searchOpen, setSearchOpen] = useState(false);
+
+  const open = mobile ? true : sidebarOpen;
 
   let linkIndex = 0;
 
   return (
     <>
       <motion.aside
-        layout
-        className="bg-white h-screen flex flex-col relative shadow-md shadow-black/5"
-        animate={{ width: sidebarOpen ? 230 : 72 }}
+        layout={!mobile}
+        className="bg-white h-full flex flex-col relative shadow-md shadow-black/5"
+        animate={{ width: mobile ? 280 : open ? 230 : 72 }}
         transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
       >
-        <motion.button
-          layout
-          whileHover={{ scale: 1.08 }}
-          whileTap={{ scale: 0.92 }}
-          onClick={toggleSidebar}
-          className="absolute -right-3 top-4 z-20 w-9 h-9 rounded-full bg-white border border-gray-200 shadow-md flex items-center justify-center text-gray-400 hover:text-gray-700 hover:border-gray-300 transition-all"
-        >
-          {sidebarOpen ? <FiChevronLeft size={18} /> : <FiChevronRight size={12} />}
-        </motion.button>
+        {!mobile && (
+          <motion.button
+            layout
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.92 }}
+            onClick={toggleSidebar}
+            className="absolute -right-3 top-4 z-20 w-9 h-9 rounded-full bg-white border border-gray-200 shadow-md flex items-center justify-center text-gray-400 hover:text-gray-700 hover:border-gray-300 transition-all"
+          >
+            {open ? <FiChevronLeft size={18} /> : <FiChevronRight size={12} />}
+          </motion.button>
+        )}
+
+        {mobile && (
+          <button
+            onClick={onClose}
+            className="absolute -right-3 top-4 z-20 w-9 h-9 rounded-full bg-white border border-gray-200 shadow-md flex items-center justify-center text-gray-400 hover:text-gray-700 hover:border-gray-300 transition-all"
+            aria-label="Close menu"
+          >
+            <FiX size={16} />
+          </button>
+        )}
 
         <div className="h-16 flex items-center px-4 overflow-hidden border-b border-gray-100">
           <motion.div layout className="flex items-center gap-3 min-w-0">
-            <img src="/diobral.png" alt="" className="w-8 h-8 object-contain flex-shrink-0" />
+            <img src="/diobral.webp" alt="" className="w-8 h-8 object-contain flex-shrink-0" />
             <AnimatePresence mode="wait">
-              {sidebarOpen && (
+              {open && (
                 <motion.span
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -88,7 +102,7 @@ export default function Sidebar() {
         </div>
 
         <div className="flex-shrink-0">
-          {sidebarOpen ? (
+          {open ? (
             <div className="px-3 pt-3">
               <div className="relative">
                 <FiSearch size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -113,7 +127,7 @@ export default function Sidebar() {
         </div>
 
         <div className="flex-shrink-0 px-2.5 pt-2 pb-1">
-          {sidebarOpen ? (
+          {open ? (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -138,9 +152,9 @@ export default function Sidebar() {
 
         <nav className="flex-1 p-2.5 overflow-y-auto scrollbar-none mt-1">
           {sections.map((section) => (
-            <div key={section.label} className={sidebarOpen ? "mb-4" : "mb-3"}>
+            <div key={section.label} className={open ? "mb-4" : "mb-3"}>
               <AnimatePresence mode="wait">
-                {sidebarOpen && (
+                {open && (
                   <motion.p
                     initial={{ opacity: 0, y: -4 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -152,7 +166,7 @@ export default function Sidebar() {
                   </motion.p>
                 )}
               </AnimatePresence>
-              <div className={sidebarOpen ? "space-y-0.5" : "flex flex-col items-center gap-1"}>
+              <div className={open ? "space-y-0.5" : "flex flex-col items-center gap-1"}>
                 {section.links.map(({ to, label, icon: Icon }) => {
                   const idx = linkIndex++;
                   const isActive = to === "/" ? location.pathname === "/" : location.pathname.startsWith(to);
@@ -160,12 +174,13 @@ export default function Sidebar() {
                     <NavLink key={to} to={to} end={to === "/"} className="relative block group w-full">
                       <motion.div
                         layout
-                        variants={sidebarOpen ? navItem : undefined}
-                        initial={sidebarOpen ? "hidden" : false}
-                        animate={sidebarOpen ? "visible" : undefined}
+                        variants={open ? navItem : undefined}
+                        initial={open ? "hidden" : false}
+                        animate={open ? "visible" : undefined}
                         custom={idx}
+                        onClick={mobile ? onClose : undefined}
                         className={`flex items-center rounded-2xl text-sm font-medium transition-all duration-200 ${
-                          sidebarOpen
+                          open
                             ? "gap-3 px-3 py-2.5"
                             : "justify-center w-10 h-10"
                         } ${
@@ -175,7 +190,7 @@ export default function Sidebar() {
                         }`}
                       >
                         <div className="relative flex-shrink-0">
-                          <Icon size={sidebarOpen ? 19 : 18} />
+                          <Icon size={open ? 19 : 18} />
                           {isActive && (
                             <motion.span
                               layoutId="activeDot"
@@ -185,7 +200,7 @@ export default function Sidebar() {
                           )}
                         </div>
                         <AnimatePresence mode="wait">
-                          {sidebarOpen && (
+                          {open && (
                             <motion.span
                               initial={{ opacity: 0, x: -6 }}
                               animate={{ opacity: 1, x: 0 }}
@@ -197,7 +212,7 @@ export default function Sidebar() {
                           )}
                         </AnimatePresence>
                       </motion.div>
-                      {!sidebarOpen && (
+                      {!open && (
                         <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-gray-900 text-white text-xs rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 shadow-lg">
                           {label}
                         </div>
@@ -217,12 +232,12 @@ export default function Sidebar() {
             whileTap={{ scale: 0.98 }}
             onClick={logout}
             className={`flex items-center rounded-2xl text-sm font-medium text-gray-400 hover:bg-red-50 hover:text-red-600 transition-all duration-200 ${
-              sidebarOpen ? "gap-3 px-3 py-2.5 w-full" : "justify-center w-full py-2.5"
+              open ? "gap-3 px-3 py-2.5 w-full" : "justify-center w-full py-2.5"
             }`}
           >
-            <FiLogOut size={sidebarOpen ? 19 : 18} className="flex-shrink-0" />
+            <FiLogOut size={open ? 19 : 18} className="flex-shrink-0" />
             <AnimatePresence mode="wait">
-              {sidebarOpen && (
+              {open && (
                 <motion.span
                   initial={{ opacity: 0, x: -6 }}
                   animate={{ opacity: 1, x: 0 }}

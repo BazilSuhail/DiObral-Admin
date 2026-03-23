@@ -8,6 +8,9 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
   const token = useGlobalStore.getState().token;
   if (token) config.headers.Authorization = `Bearer ${token}`;
+  console.log(`🚀 %c${config.method?.toUpperCase()} ${config.baseURL}${config.url}`, "font-weight:bold;color:#ef4444");
+  console.log("📦 Headers:", JSON.stringify(config.headers, null, 2));
+  console.log("📄 Body:", config.data instanceof FormData ? Object.fromEntries(config.data) : config.data);
   return config;
 });
 
